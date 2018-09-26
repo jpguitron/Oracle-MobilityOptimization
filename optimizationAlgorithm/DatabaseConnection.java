@@ -15,7 +15,7 @@ public class DatabaseConnection
         Node nodes[];       
         Statement stmt = null;
         Connection conn = connect();
-
+        
         try 
         {
             stmt = conn.createStatement();
