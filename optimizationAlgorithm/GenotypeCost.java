@@ -6,27 +6,6 @@ import io.jenetics.EnumGene;
 
 public class GenotypeCost
 {
-    //Helper function for adding cost between to nodes//
-    private static double getCost(int c_node, int n_node)
-    {
-        for(Node node : MobilityOptimization.nodes)
-        {
-            if(node.id == c_node)
-            {
-                for (int k=0;k<node.TEdgeSize; k++)
-                {
-                    edge _edge = node.transitionEdges[k];
-                    if(_edge.dest == n_node)
-                    {
-                        double cost = _edge.cost;
-                        return cost;
-                    }
-                }
-            }
-        }
-        return 0.0;
-    }
-    
     //Main function for calculating genotype cost//
     public static double calculate(Genotype<EnumGene<Integer>> routeGenotype, Genotype<BitGene> ownGenotype)
     {
@@ -34,19 +13,19 @@ public class GenotypeCost
         //System.out.println("O: " + ownGenotype);
         double cost = 0;
                      
-        for (int i=0; i<MobilityOptimization.startNodes.length; i++)                        // Loop through all routes
+        for (int i=0; i<MobilityOptimization.startNodes.length; i++)                         // Loop through all routes
         {
             int routeID         = MobilityOptimization.startNodes[i];
             int current_node_id = routeID; 
             /*System.out.println("-----------");
             System.out.println("Route: " + i);
             System.out.println("-----------");*/
-            for(int j=0; j<routeGenotype.getChromosome(i).length(); j++)                    // Loop through all transition nodes for the current route
+            for(int j=0; j<routeGenotype.getChromosome(i).length(); j++)                     // Loop through all transition nodes for the current route
             {
-                boolean addCost  = true;                                                    // Boolean to determine if a cost should be added for this transition
-                int next_node_id = routeGenotype.getChromosome(i).getGene(j).getAllele();   // Id of possible node to visit
-            
-                for (int k=0;k<MobilityOptimization.overlaps.length;k++)                    // Loop to check if current node has overlap
+                boolean addCost  = true;                                                     // Boolean to determine if a cost should be added for this transition
+                int next_node_index = routeGenotype.getChromosome(i).getGene(j).getAllele(); // Index of possible node to visit
+                int next_node_id = MobilityOptimization.routeMap[i][next_node_index];        // Get next_node_id from map
+                for (int k=0;k<MobilityOptimization.overlaps.length;k++)                     // Loop to check if current node has overlap
                 {
                     Overlap c_overlap = MobilityOptimization.overlaps[k];
                     if(c_overlap.overlap_node == next_node_id)
@@ -79,8 +58,8 @@ public class GenotypeCost
                 //System.out.print("Add: " + addCost + " ");
                 if(addCost)
                 {
-                    //System.out.print(current_node_id + " - " + next_node_id);
-                    cost += getCost(current_node_id, next_node_id); 
+                    cost += getCost(current_node_id, next_node_id);
+                    //System.out.println(current_node_id + " - " + next_node_id + " C " + cost);
                     current_node_id = next_node_id;
                     
                 }
@@ -102,6 +81,37 @@ public class GenotypeCost
                 }
             }
         }
+
+        if(cost < MobilityOptimization.minCost)
+        {
+            MobilityOptimization.minCost   = cost;
+            MobilityOptimization.bestRoute = routeGenotype;
+            MobilityOptimization.bestOwn   = ownGenotype;
+        }
         return cost;
+    }
+    
+    /*
+    TODO improve this
+    */
+    //Helper function for adding cost between to nodes//
+    private static double getCost(int c_node, int n_node)
+    {
+        for(Node node : MobilityOptimization.nodes)
+        {
+            if(node.id == c_node)
+            {
+                for (int k=0;k<node.TEdgeSize; k++)
+                {
+                    edge _edge = node.transitionEdges[k];
+                    if(_edge.dest == n_node)
+                    {
+                        double cost = _edge.cost;
+                        return cost;
+                    }
+                }
+            }
+        }
+        return 0.0;
     }
 }

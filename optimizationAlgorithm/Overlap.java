@@ -11,7 +11,7 @@ class Overlap
     {
         overlap_node = o;
         route_node_1 = r1;
-        route_node_1= r2;
+        route_node_2= r2;
         probability = p;
     }
 }

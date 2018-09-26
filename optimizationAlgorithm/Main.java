@@ -5,8 +5,8 @@ public class Main
     public static void main(String[] args)
     {   
         //Hyperparameters
-        int generationSize          = 1;
-        int numIterations           = 1;
+        int generationSize          = 20;
+        int numIterations           = 100;
         float crossProbability      = 0.9f;
         float mutateProbability     = 0.01f;
         float overlapAggressiveness = 2.0f;
