@@ -1,4 +1,4 @@
-package geneticAlgorithm;
+/*package optimizationAlgorithm;
 import org.jenetics.Genotype;
 import org.jenetics.EnumGene;
 import java.util.Random;
@@ -173,4 +173,4 @@ public class GenotypeCost
         }
         return cost;
     }
-}
+}*/
