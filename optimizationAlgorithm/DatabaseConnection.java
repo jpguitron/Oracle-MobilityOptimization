@@ -10,12 +10,12 @@ import java.sql.*;
 
 public class DatabaseConnection 
 {
-    private static Node[] nodes_matrix(int initialNodes[],int finalNode, int transitionNodes[])
+    public static Node[] nodes_matrix(int initialNodes[],int finalNode, int transitionNodes[])
     {
         Node nodes[];       
         Statement stmt = null;
         Connection conn = connect();
-
+        
         try 
         {
             stmt = conn.createStatement();
