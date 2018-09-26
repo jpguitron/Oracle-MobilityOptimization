@@ -27,10 +27,13 @@ import io.jenetics.util.ISeq;
 import java.time.Duration;*/
 
 public class MobilityOptimization
-{      
+{   
+    // Populations for route and ownership genotypes
     private static ISeq<Genotype<EnumGene<Integer>>> routeGenotypes;
     private static ISeq<Genotype<BitGene>> ownGenotypes;
     
+    //Nodes array
+    public static Node[] nodes;
     
     //Function for evaluating route permutation genotypes (Permutation Chromosomes)
     private static double evalRoutePerm (Genotype<EnumGene<Integer>> routeGenotype) 
@@ -65,8 +68,11 @@ public class MobilityOptimization
     }
     
     
-    public static void run (int[] startNodes, int generationSize, int numIterations, float crossProbability, float mutateProbability, float overlapAggressiveness) 
+    public static void run (int[] initialtNodes, int finalNode, int[] transitionNodes , int generationSize, int numIterations, float crossProbability, float mutateProbability, float overlapAggressiveness) 
     {
+        nodes = DatabaseConnection.nodes_matrix(initialtNodes, finalNode, transitionNodes);
+    
+    
         //Set default parameter values for custom chromosomes
         RouteChromosome.defaultAgg = overlapAggressiveness;
         OwnChromosome.probsArray = new double[]{0.0,0.0,0.0,1.0,1.0,1.0, 1.0,1.0,1.0,1.0, 1.0,1.0};
@@ -76,6 +82,10 @@ public class MobilityOptimization
         TODO create custom chromosomes for initialization
         TODO set convergence criteria
         */
+        
+        
+        
+        
         
         final Factory<Genotype<EnumGene<Integer>>> routePermFactory = Genotype.of(
         RouteChromosome.ofInteger(0,10, RouteChromosome.defaultAgg),

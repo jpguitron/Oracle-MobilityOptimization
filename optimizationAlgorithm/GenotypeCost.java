@@ -13,7 +13,12 @@ public class GenotypeCost
     {
         System.out.println("R: " + routeGenotype);
         System.out.println("O: " + ownGenotype);
-        //System.exit(0);
+        System.exit(0);
+        
+        
+        
+        
+        
         
         
         

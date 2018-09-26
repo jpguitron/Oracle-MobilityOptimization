@@ -12,13 +12,17 @@ public class Main
         float overlapAggressiveness = 2.0f;
         
         //Node info
-        int goalNode                = 100;
-        int[] startNodes            = {101,102,103,104,105};
-        int[] transitNodes          = new int[50];
+        int[] initialNodes           = {101,102,103,104,105};
+        int finalNode                = 100;
+        int[] transitionNodes_1      = new int[50];
+        int[] transitionNodes_2      = new int[50];
         for (int i=0; i < 50;i++)
         {
-            transitNodes[i] = i;
+            transitionNodes_1[i] = i;
+            transitionNodes_2[i] = 50+i;
         }
-        MobilityOptimization.run(startNodes,generationSize, numIterations , crossProbability, mutateProbability, overlapAggressiveness);
+        
+        //Execution
+        MobilityOptimization.run(initialNodes,finalNode,transitionNodes_1,generationSize, numIterations , crossProbability, mutateProbability, overlapAggressiveness);
     }
 }
