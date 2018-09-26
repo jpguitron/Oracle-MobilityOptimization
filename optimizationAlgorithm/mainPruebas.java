@@ -1,13 +1,9 @@
-
 package optimizationAlgorithm;
 
-import java.util.Set;
-import java.util.HashSet;
-
-import optimizationAlgorithm.*;
-
-public class mainPruebas {
-    public static void main(String[] args) {
+public class mainPruebas 
+{
+    public static void main(String[] args) 
+    {
         int[] a = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
                 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49 };
         int[] b = { 101, 102, 103, 104, 105 };
@@ -45,30 +41,18 @@ public class mainPruebas {
         Routes rutas = new Routes(b);
         rutas.nodes_route(b, a, c, w);
 
-        //
-        int y;
-        for (int x = 0; x < rutas.routes.length; x++) {
-            // System.out.print("Route id: " + rutas.routes[x].routeName + " : ");
-
-            for (y = x + 1; y < rutas.routes.length; y++) {
-                Set<Node> OverlapA = new HashSet<Node>(rutas.routes[x].hash_Set);
-                Set<Node> OverlapB = new HashSet<Node>(rutas.routes[y].hash_Set);
-
-                OverlapA.retainAll(OverlapB);
-                if (OverlapA.size() > 0) {
-                    System.out.print("Overlap x:" + x + " y:" + y + " ");
-                    for (Node s : OverlapA) {
-                        System.out.print(s.id + ",");
-                    }
-                    System.out.println();
-                }
-            }
-            //
-
-            /**
-             * for (Node s : rutas.routes[x].hash_Set) { System.out.print(s.id + ","); }
-             **/
+        SetOverlaps overlaps = new SetOverlaps();
+        Overlap over[] = overlaps.getOverlaps(rutas,b,w);
+        for(int x = 0;x < over.length; x++)
+        {
+            System.out.print("Overlap "+x+": ");
+            System.out.print(over[x].overlap_node+" ");
+            System.out.print(over[x].route_node_1+" ");
+            System.out.print(over[x].route_node_2+" ");
+            System.out.println(over[x].probability);
 
         }
+        
+        
     }
 }
