@@ -60,25 +60,31 @@ public class MobilityOptimization
         
         double cost = 0;
         //Calculate cost of current ownGenotype by evaluating it together with each of the routeGenotypes
-        for( Genotype<EnumGene<Integer>> routeGenotype :  routeGenotypes)
-        {
+        for( Genotype<EnumGene<Integer>> routeGenotype :  routeGenotypes){
             cost += GenotypeCost.calculate(routeGenotype, ownGenotype);
         }
         return cost;
     }
     
-    
+
+    ////////////////////////////////////////////////////////////////////MAIN GA FUNCTION//////////////////////////////////////////////////////////////////
     public static void run (int[] initialtNodes, int finalNode, int[] transitionNodes , int generationSize, int numIterations, float crossProbability, float mutateProbability, float overlapAggressiveness) 
     {
         nodes = DatabaseConnection.nodes_matrix(initialtNodes, finalNode, transitionNodes);
     
+        Overlap[] overlaps = new Overlap[3];
+        overlaps[0] = new Overlap(1, 101, 102, 0.8);
+        overlaps[1] = new Overlap(1, 103, 104, 0.4);
+        overlaps[2] = new Overlap(1, 105, 102, 0.2);
+        //double[] probs = getProbabilityArray(overlaps);
         
-        O
-    
+        
+        
+        
         //Set default parameter values for custom chromosomes
         RouteChromosome.defaultAgg = overlapAggressiveness;
-        OwnChromosome.probsArray = new double[]{0.0,0.0,0.0,1.0,1.0,1.0, 1.0,1.0,1.0,1.0, 1.0,1.0};
-        
+        //OwnChromosome.probsArray = new double[]{0.0,0.0,0.0,1.0,1.0,1.0, 1.0,1.0,1.0,1.0, 1.0,1.0};
+        OwnChromosome.probsArray = getProbabilityArray(overlaps);
         /*
         TODO create chromosomes with parameters given from previous functions
         TODO create custom chromosomes for initialization
@@ -117,5 +123,18 @@ public class MobilityOptimization
               ownGenotypes   = engineOwn.stream().limit(1).collect(EvolutionResult.toBestEvolutionResult()).getGenotypes();
         }
     }
+    
+    
+    ///////////////////////////////////////////HELPER FUNCTIONS////////////////////////////////////////////
+    //Function for getting probability array out of all overlaps
+    private static double[] getProbabilityArray(Overlap[] overlaps)
+    {
+        double[] probs = new double[overlaps.length];
+        for (int i=0; i<overlaps.length;i++){
+            probs[i] = overlaps[i].probability;
+        }
+        return probs;
+    }
+    
 }
 
