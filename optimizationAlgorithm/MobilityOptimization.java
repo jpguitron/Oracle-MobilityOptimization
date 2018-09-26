@@ -12,7 +12,6 @@ import io.jenetics.Phenotype;
 import io.jenetics.BitGene;
 import io.jenetics.BitChromosome;
 import io.jenetics.EnumGene;
-import io.jenetics.PermutationChromosome;
 
 //Selectors, alterers, mutators & scalers
 import io.jenetics.PartiallyMatchedCrossover;
@@ -88,13 +87,7 @@ public class MobilityOptimization
         RouteChromosome.ofInteger(0,10, overlapAggressiveness),
         RouteChromosome.ofInteger(0,5, overlapAggressiveness)); 
 
-        final Factory<Genotype<BitGene>> ownChangeFactory = Genotype.of (BitChromosome.of(10 , 0.5)); 
-        
-        // Best genotypes found of each kind (permutations and bits)
-        //bestRoutes = routePermFactory.newInstance();
-        //bestOwns = ownChangeFactory.newInstance();
-        
-        
+        final Factory<Genotype<BitGene>> ownChangeFactory = Genotype.of (OwnChromosome.of(10 , 0.5)); 
 
         //Build both optimization engines//
         Engine<EnumGene<Integer>, Double> engineRoute = Engine.builder(MobilityOptimization::evalRoutePerm, routePermFactory)
