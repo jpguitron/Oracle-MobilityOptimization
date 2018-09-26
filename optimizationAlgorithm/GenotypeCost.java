@@ -6,9 +6,28 @@ import io.jenetics.EnumGene;
 
 public class GenotypeCost
 {
-
+    //Helper function for adding cost between to nodes//
+    private static double getCost(int c_node, int n_node)
+    {
+        for(Node node : MobilityOptimization.nodes)
+        {
+            if(node.id == c_node)
+            {
+                for (int k=0;k<node.TEdgeSize; k++)
+                {
+                    edge _edge = node.transitionEdges[k];
+                    if(_edge.dest == n_node)
+                    {
+                        double cost = _edge.cost;
+                        return cost;
+                    }
+                }
+            }
+        }
+        return 0.0;
+    }
     
-    
+    //Main function for calculating genotype cost//
     public static double calculate(Genotype<EnumGene<Integer>> routeGenotype, Genotype<BitGene> ownGenotype)
     {
         //System.out.println("R: " + routeGenotype);
@@ -61,24 +80,7 @@ public class GenotypeCost
                 if(addCost)
                 {
                     //System.out.print(current_node_id + " - " + next_node_id);
-                    
-                    
-                    for(Node node : MobilityOptimization.nodes)
-                    {
-                        if(node.id == current_node_id)
-                        {
-                            for (int k=0;k<node.TEdgeSize; k++)
-                            {
-                                edge _edge = node.transitionEdges[k];
-                                if(_edge.dest == next_node_id)
-                                {
-                                    //System.out.print(node.id + " - " + _edge.dest + " C " + _edge.cost);
-                                    cost += _edge.cost;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    cost += getCost(current_node_id, next_node_id); 
                     current_node_id = next_node_id;
                     
                 }
@@ -87,6 +89,17 @@ public class GenotypeCost
                     System.out.print(current_node_id + " - " + next_node_id);
                 }*/
                 //System.out.println("\n");
+            }
+            
+            //Add cost to last node manually
+            for(Node node : MobilityOptimization.nodes)
+            {
+                if(node.id == current_node_id)
+                {
+                    //System.out.println("CF: " + node.destEdge.cost);
+                    cost += node.destEdge.cost;
+                    break;
+                }
             }
         }
         return cost;

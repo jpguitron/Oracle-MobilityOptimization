@@ -35,6 +35,7 @@ public class MobilityOptimization
     public static Node[] nodes;         //Nodes array
     public static Overlap[] overlaps;   //Overlaps array
     public static int[] startNodes;     // StartNodesIDs
+    public static int destNode;         // DestNodeID
     
     //Function for evaluating route permutation genotypes (Permutation Chromosomes)
     private static double evalRoutePerm (Genotype<EnumGene<Integer>> routeGenotype) 
@@ -85,7 +86,7 @@ public class MobilityOptimization
         OwnChromosome.probsArray = getProbabilityArray(overlaps);
         
         startNodes = initialNodes;
-        
+        destNode   = finalNode;
         
         
         
