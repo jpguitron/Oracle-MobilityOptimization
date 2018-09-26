@@ -37,6 +37,9 @@ public class OwnChromosome extends Number
 
 	protected byte[] _genes;
 
+    //Default aggressiveness value for new instances//
+	public static double[] probsArray;
+	
 	// Wraps the genes byte array into a Seq<BitGene>.
 	private transient BitGeneISeq _seq;
 
@@ -61,6 +64,9 @@ public class OwnChromosome extends Number
 		this(bits, 0, bits.length << 3);
 	}
 
+	
+	///////////////////////////////////Constructor Called//////////////////////////////////////////
+	
 	private OwnChromosome(final byte[] bits, final int length) {
 		this(
 			bits,
@@ -69,6 +75,7 @@ public class OwnChromosome extends Number
 			(double)(length == -1 ? bits.length*8 : length)
 		);
 	}
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
 	private static byte[] toByteArray(final CharSequence value) {
 		final byte[] bytes = bit.newArray(value.length());
@@ -250,7 +257,7 @@ public class OwnChromosome extends Number
 
 	@Override
 	public OwnChromosome newInstance() {
-		return of(_length, _p);
+        return of(probsArray);
 	}
 
 	public String toCanonicalString() {
@@ -269,70 +276,27 @@ public class OwnChromosome extends Number
 		return new OwnChromosome(data, _length, 1.0 - _p);
 	}
 
-	public static OwnChromosome of(final int length, final double p) {
-		return new OwnChromosome(bit.newArray(length, p), length, p);
-	}
-
-	public static OwnChromosome of(final int length) {
-		return new OwnChromosome(bit.newArray(length, 0.5), length, 0.5);
-	}
-
-	public static OwnChromosome of(final BitSet bits, final int length) {
-		final byte[] bytes = bit.newArray(length);
-		for (int i = 0; i < length; ++i) {
-			if (bits.get(i)) {
-				bit.set(bytes, i);
-			}
-		}
-		final double p = (double)bit.count(bytes)/(double)length;
-
-		return new OwnChromosome(bytes, length, p);
-	}
-
-	public static OwnChromosome of(
-		final BitSet bits,
-		final int length,
-		final double p
-	) {
-		final byte[] bytes = bit.newArray(length);
-		for (int i = 0; i < length; ++i) {
-			if (bits.get(i)) {
-				bit.set(bytes, i);
-			}
-		}
-
-		return new OwnChromosome(bytes, length, require.probability(p));
-	}
-
-	public static OwnChromosome of(final BitSet bits) {
-		return new OwnChromosome(bits.toByteArray(), -1);
-	}
-
-	public static OwnChromosome of(final BigInteger value) {
-		return new OwnChromosome(value.toByteArray(), -1);
-	}
-
-	public static OwnChromosome of(final BigInteger value, final double p) {
-		final byte[] bits = value.toByteArray();
-		return new OwnChromosome(bits, bits.length*8, require.probability(p));
-	}
-
-	public static OwnChromosome of(final CharSequence value) {
-		return new OwnChromosome(toByteArray(requireNonNull(value, "Input")), -1);
-	}
-
-	public static OwnChromosome of(final CharSequence value, final double p) {
-		final byte[] bits = toByteArray(requireNonNull(value, "Input"));
-		return new OwnChromosome(bits, bits.length*8, require.probability(p));
-	}
-
-	public static OwnChromosome of(
-		final CharSequence value,
-		final int length,
-		final double p
-	) {
-		final byte[] bits = toByteArray(requireNonNull(value, "Input"));
-		return new OwnChromosome(bits, length, require.probability(p));
+    //////////////////////////////////////Main generation function with ownership probabilities//
+    public static OwnChromosome of(final double[] ownershipProbs ) {
+    
+        int length = ownershipProbs.length;
+        byte[] bits = bit.newArray(length,0);
+        
+        //Turn bits on with specified probabilities
+        for(int i=0;i<ownershipProbs.length;i++) 
+        {
+            if(ownershipProbs[i] > Math.random())
+                bits[(int)(Math.floor(i/8))] |= 1 << i%8;
+        }
+        
+        //Print
+        /*for (int i=0;i<bits.length;i++) 
+        {
+            // shorthand
+            int positive = bits[i] & 0xff;
+            System.out.print(positive + " , ");
+        }*/
+		return new OwnChromosome(bits, length);
 	}
 
 	@Override

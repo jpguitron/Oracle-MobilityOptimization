@@ -34,11 +34,6 @@ public final class RouteChromosome<T>
 	implements Serializable
 {
 	private static final long serialVersionUID = 2L;
-
-    //Default aggressiveness when creating new instances//
-    /*
-        TODO Set value with parameter from main
-    */
     
     //Default aggressiveness value for new instances//
 	public static float defaultAgg;

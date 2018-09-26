@@ -27,15 +27,7 @@ import io.jenetics.util.ISeq;
 import java.time.Duration;*/
 
 public class MobilityOptimization
-{   
-
-    //Static variables for storing best chromosomes oh each type found so far
-    //private static Genotype<EnumGene<Integer>> bestRoutes;
-    //private static Genotype<BitGene> bestOwns;
-
-    //private static EvolutionResult<EnumGene<Integer>, Double> routeEvolution;
-    //private static EvolutionResult<BitGene, Double> ownEvolution;
-    
+{      
     private static ISeq<Genotype<EnumGene<Integer>>> routeGenotypes;
     private static ISeq<Genotype<BitGene>> ownGenotypes;
     
@@ -77,17 +69,23 @@ public class MobilityOptimization
     {
         //Set default parameter values for custom chromosomes
         RouteChromosome.defaultAgg = overlapAggressiveness;
-    
+        OwnChromosome.probsArray = new double[]{0.0,0.0,0.0,1.0,1.0,1.0, 1.0,1.0,1.0,1.0, 1.0,1.0};
+        
         /*
         TODO create chromosomes with parameters given from previous functions
         TODO create custom chromosomes for initialization
         TODO set convergence criteria
         */
+        
         final Factory<Genotype<EnumGene<Integer>>> routePermFactory = Genotype.of(
-        RouteChromosome.ofInteger(0,10, overlapAggressiveness),
-        RouteChromosome.ofInteger(0,5, overlapAggressiveness)); 
+        RouteChromosome.ofInteger(0,10, RouteChromosome.defaultAgg),
+        RouteChromosome.ofInteger(0,5, RouteChromosome.defaultAgg)); 
 
-        final Factory<Genotype<BitGene>> ownChangeFactory = Genotype.of (OwnChromosome.of(10 , 0.5)); 
+        //Receive this from function//
+        //double[] probs = {0.0,0.0,0.0,1.0,1.0,1.0, 1.0,1.0,1.0,1.0, 1.0,1.0};
+        
+        
+        final Factory<Genotype<BitGene>> ownChangeFactory = Genotype.of (OwnChromosome.of(OwnChromosome.probsArray)); 
 
         //Build both optimization engines//
         Engine<EnumGene<Integer>, Double> engineRoute = Engine.builder(MobilityOptimization::evalRoutePerm, routePermFactory)
