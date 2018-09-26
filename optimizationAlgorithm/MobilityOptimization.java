@@ -72,6 +72,8 @@ public class MobilityOptimization
     {
         nodes = DatabaseConnection.nodes_matrix(initialtNodes, finalNode, transitionNodes);
     
+        
+        O
     
         //Set default parameter values for custom chromosomes
         RouteChromosome.defaultAgg = overlapAggressiveness;
