@@ -19,7 +19,7 @@ class Route
 }
 public class Routes 
 {
-    float aggression = 1.2f;
+    float aggression = 1.2f; //Set aggression for the nodes
     public Route routes[];
 
     public Routes(int routesId[]) 
