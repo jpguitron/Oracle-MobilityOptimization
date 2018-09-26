@@ -94,16 +94,10 @@ public class MobilityOptimization
         
         // SETUP GA variables
         nodes = DatabaseConnection.nodes_matrix(initialNodes, finalNode, transitionNodes);
-    
-        overlaps = new Overlap[3];
-        overlaps[0] = new Overlap(7, 104, 105, 0.8);
-        overlaps[1] = new Overlap(4, 103, 104, 0.4);
-        overlaps[2] = new Overlap(5, 105, 102, 0.2);
         
         
         //Set default parameter values for custom chromosomes
         RouteChromosome.defaultAgg = overlapAggressiveness;
-        OwnChromosome.probsArray = getProbabilityArray(overlaps);
         
         //Set start and dest nodes info
         startNodes = initialNodes;
@@ -126,8 +120,10 @@ public class MobilityOptimization
             routeChromosomes.add(RouteChromosome.ofInteger(0,i,RouteChromosome.defaultAgg));
         }
         
-        
-        
+        //Get overlap info
+        SetOverlaps _overlaps = new SetOverlaps();
+        overlaps = _overlaps.getOverlaps(routes,startNodes,nodes);
+        OwnChromosome.probsArray = getProbabilityArray(overlaps);
         
         // Initialize both genotype factories//
         final Factory<Genotype<EnumGene<Integer>>> routePermFactory = Genotype.of(routeChromosomes);
@@ -165,7 +161,7 @@ public class MobilityOptimization
         System.out.println();
         System.out.println("Total Time: ");
         System.out.println("Total Distance: ");
-        System.out.println("Total Cost: ");
+        System.out.println("Total Cost: " + bestGenotypeCost);
         System.out.println();
     }
     
