@@ -31,49 +31,68 @@ public class MobilityOptimization
 {   
 
     //Static variables for storing best chromosomes oh each type found so far
-    private static Genotype<EnumGene<Integer>> bestRoutes;
-    private static Genotype<BitGene> bestOwns;
+    //private static Genotype<EnumGene<Integer>> bestRoutes;
+    //private static Genotype<BitGene> bestOwns;
 
+    //private static EvolutionResult<EnumGene<Integer>, Double> routeEvolution;
+    //private static EvolutionResult<BitGene, Double> ownEvolution;
+    
+    private static ISeq<Genotype<EnumGene<Integer>>> routeGenotypes;
+    private static ISeq<Genotype<BitGene>> ownGenotypes;
+    
+    
     //Function for evaluating route permutation genotypes (Permutation Chromosomes)
-    private static double evalRoutePerm (Genotype<EnumGene<Integer>> genotype) 
-    {
-        /*return gt.getChromosome ()
-            .as (BitChromosome.class)
-            .bitCount();*/
-        return 1.0;
+    private static double evalRoutePerm (Genotype<EnumGene<Integer>> routeGenotype) 
+    {   
+        //Start evaluating after ownGenotypes population has been created
+        if(ownGenotypes == null)
+            return 0;
+            
+        double cost = 0;
+        //Calculate cost of current routeGenotype by evaluating it together with each of the ownGenotypes
+        for( Genotype<BitGene> ownGenotype :  ownGenotypes)
+        {
+            cost += GenotypeCost.calculate(routeGenotype, ownGenotype);
+        }
+        return cost;
     }
     
     //Function for evaluating ownership genotypes (Bit Chromosomes)
-    private static double evalOwnChange (Genotype<BitGene> genotype) 
+    private static double evalOwnChange (Genotype<BitGene> ownGenotype) 
     {
-        /*return gt.getChromosome ()
-            .as (BitChromosome.class)
-            .bitCount();*/
-        return 1.0;
+        //Start evaluating after routeGenotypes population has been created
+        if(routeGenotypes == null)
+            return 0;
+        
+        double cost = 0;
+        //Calculate cost of current ownGenotype by evaluating it together with each of the routeGenotypes
+        for( Genotype<EnumGene<Integer>> routeGenotype :  routeGenotypes)
+        {
+            cost += GenotypeCost.calculate(routeGenotype, ownGenotype);
+        }
+        return cost;
     }
     
     
-    public static void run (int generationSize, int numIterations, float crossProbability, float mutateProbability, float overlapAggressiveness) 
+    public static void run (int[] startNodes, int generationSize, int numIterations, float crossProbability, float mutateProbability, float overlapAggressiveness) 
     {
+        //Set default parameter values for custom chromosomes
+        RouteChromosome.defaultAgg = overlapAggressiveness;
     
-        ////////////////////////////////////////////////////ROUTE PERMUTATIONS////////////////////////////////////////////////////////////
-        
-        //final Factory<Genotype<EnumGene<Integer>>> routePermFactory = Genotype.of(WarehouseChromosome.ofInteger(0,GenotypeCost.productZones,similarity)); 
-        //Genotype factory for generating permutations for the stablished routes//
         /*
         TODO create chromosomes with parameters given from previous functions
         TODO create custom chromosomes for initialization
         TODO set convergence criteria
         */
         final Factory<Genotype<EnumGene<Integer>>> routePermFactory = Genotype.of(
-        PermutationChromosome.ofInteger(0,10),
-        PermutationChromosome.ofInteger(0,5)); 
+        RouteChromosome.ofInteger(0,10, overlapAggressiveness),
+        RouteChromosome.ofInteger(0,5, overlapAggressiveness)); 
 
         final Factory<Genotype<BitGene>> ownChangeFactory = Genotype.of (BitChromosome.of(10 , 0.5)); 
         
         // Best genotypes found of each kind (permutations and bits)
-        bestRoutes = routePermFactory.newInstance();
-        bestOwns = ownChangeFactory.newInstance();
+        //bestRoutes = routePermFactory.newInstance();
+        //bestOwns = ownChangeFactory.newInstance();
         
         
 
@@ -88,14 +107,12 @@ public class MobilityOptimization
         
         
         //Execute alternate iterations of genetic algorithms
-        for(int i=0; i<numIterations; i++){
+        for(int i=0; i<numIterations; i++)
+        {
               System.out.println("i: " + i);
-              bestRoutes = engineRoute.stream().limit(1).collect(EvolutionResult.toBestGenotype());
-              bestOwns   = engineOwn.stream().limit(1).collect(EvolutionResult.toBestGenotype());
-         }
-        
-        System.out.println("Best routes: \n \t " + bestRoutes);
-        System.out.println("Result owns: \n \t " + bestOwns);        
+              routeGenotypes = engineRoute.stream().limit(1).collect(EvolutionResult.toBestEvolutionResult()).getGenotypes();
+              ownGenotypes   = engineOwn.stream().limit(1).collect(EvolutionResult.toBestEvolutionResult()).getGenotypes();
+        }
     }
 }
 

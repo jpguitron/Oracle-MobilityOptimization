@@ -1,3 +1,31 @@
+package optimizationAlgorithm;
+
+import io.jenetics.Genotype;
+import io.jenetics.BitGene;
+import io.jenetics.EnumGene;
+
+public class GenotypeCost
+{
+
+    
+    
+    public static double calculate(Genotype<EnumGene<Integer>> routeGenotype, Genotype<BitGene> ownGenotype)
+    {
+        System.out.println("R: " + routeGenotype);
+        System.out.println("O: " + ownGenotype);
+        //System.exit(0);
+        
+        
+        
+        
+        
+        
+        
+        return 1.0;
+    }
+
+}
+
 /*package optimizationAlgorithm;
 import org.jenetics.Genotype;
 import org.jenetics.EnumGene;
