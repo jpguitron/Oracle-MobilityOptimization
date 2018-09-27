@@ -9,10 +9,7 @@ public class GenotypeCost
     //Main function for calculating genotype cost//
     public static double calculate(Genotype<EnumGene<Integer>> routeGenotype, Genotype<BitGene> ownGenotype)
     {
-        //System.out.println("R: " + routeGenotype);
-        //System.out.println("O: " + ownGenotype);
         double cost = 0;
-                     
         for (int i=0; i<MobilityOptimization.startNodes.length; i++)                         // Loop through all routes
         {
             int routeID         = MobilityOptimization.startNodes[i];
@@ -65,10 +62,10 @@ public class GenotypeCost
                     current_node_id = next_node_id;
                     
                 }
-                /*else
+                else
                 {
-                    System.out.print(current_node_id + " - " + next_node_id);
-                }*/
+                    //System.out.println(current_node_id + " - " + next_node_id);
+                }
                 //System.out.println("\n");
             }
 
@@ -95,6 +92,7 @@ public class GenotypeCost
             MobilityOptimization.bestRoute = routeGenotype;
             MobilityOptimization.bestOwn   = ownGenotype;
         }
+        //System.exit(0);
         return cost;
     }
     

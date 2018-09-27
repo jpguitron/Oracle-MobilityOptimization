@@ -25,6 +25,7 @@ import io.jenetics.util.ISeq;
 
 //Other
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.text.DecimalFormat;
 /*import java.time.Duration;*/
 
@@ -129,7 +130,7 @@ public class MobilityOptimization
         SetOverlaps _overlaps = new SetOverlaps();
         overlaps = _overlaps.getOverlaps(routes,startNodes,nodes);
         OwnChromosome.probsArray = getProbabilityArray(overlaps);
-        
+        ownMapping = new HashMap<Integer, Integer>();
         for (int i=0;i<overlaps.length;i++)
         {
             ownMapping.put(overlaps[i].overlap_node, i);
