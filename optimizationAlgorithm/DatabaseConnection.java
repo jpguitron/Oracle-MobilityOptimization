@@ -22,6 +22,7 @@ public class DatabaseConnection
         }
         return false;
     }
+
     public static HashMap<Integer, Node> nodes_matrix_hashMap(int initialNodes[],int finalNode, int transitionNodes[])
     {
         HashMap<Integer, Node> hmap = new HashMap<Integer, Node>();
@@ -47,35 +48,27 @@ public class DatabaseConnection
             ResultSet rs = stmt.executeQuery( "SELECT * FROM DISTANCES WHERE ID_S != ID_E ORDER BY ID_S;" );
 
             int actual;
-            int newActual;
             int id_e;
             float distance;
             float duration;
 
-            while(rs.next())
+            do
             {
                 actual = rs.getInt("ID_S");
-                newActual = actual;
-
-
                 if (contains(allNodes,actual)) 
                 {
-                    while(rs.next())
-                    {
-                        newActual = rs.getInt("ID_S");
-                        id_e = rs.getInt("ID_E");
-                        if(newActual != actual)
-                            break;
-                        
-                        distance = rs.getFloat("distance");
-                        duration  = rs.getFloat("duration");
-                        
-                        edge edg = new edge(id_e,duration,distance);
+                 
+                    id_e = rs.getInt("ID_E");
+                    distance = rs.getFloat("distance");
+                    duration  = rs.getFloat("duration");
 
-                        hmap.get(actual).addEdge(id_e, edg);
-                    }
+                    edge edg = new edge(id_e,duration,distance);
+
+                    hmap.get(actual).addEdge(id_e, edg);
                 }
             }
+            while(rs.next());
+
 
             
             rs.close();
@@ -118,7 +111,8 @@ public class DatabaseConnection
                 ResultSet rs = stmt.executeQuery( "SELECT * FROM DISTANCES WHERE ID_S != ID_E ORDER BY ID_S;" );
                 int allNodes = initialNodes.length + transitionNodes.length + 1;
                 nodes = new Node [allNodes]; 
-    
+                
+
                 for(int x =0; x < allNodes; x++)
                 {
                     nodes[x] = new Node();
@@ -130,18 +124,18 @@ public class DatabaseConnection
                 int contNodes = 0; 
     
                 int flag = 0;
-                
                 for(int x = 0; x < allNodes;x++)
                 {
                     if(x < initialNodes.length)
                     {
+                        
                         if(actual == initialNodes[x])
                         {
                             flag = 0;
                             break;
                         }
                     }
-                    else if(x >= initialNodes.length)
+                    else if(x >= initialNodes.length && x < allNodes-1)
                     {
                         if(actual == transitionNodes[x-initialNodes.length])
                         {
@@ -154,10 +148,9 @@ public class DatabaseConnection
                         flag = 2;
                     }
                 }
-                
                 while(rs.next()) 
                 {
-                   
+
                    int id_s = rs.getInt("ID_S");
                    int id_e = rs.getInt("ID_E");
                    float distance = rs.getInt("distance");
@@ -193,8 +186,9 @@ public class DatabaseConnection
                                     break;
                                 }
                             }
-                            else if(actual == finalNode)
+                            else if(actual == finalNode && x < allNodes - 1)
                             {
+                                
                                 contNodes++;
                                 nodes[contNodes].id = actual;
                                 flag = 2;
@@ -205,7 +199,7 @@ public class DatabaseConnection
                             }
                         }
                    }
-    
+                   
                    for(int x = 0; x < allNodes;x++)
                    {
                        
@@ -235,7 +229,6 @@ public class DatabaseConnection
                            flag = 3;
                        }
                    }
-                   
                    if(flag == 0)
                     nodes[contNodes].addIEdge(id_e, duration, distance);
                    else if(flag == 1)
@@ -269,7 +262,6 @@ public class DatabaseConnection
                 System.err.println( e.getClass().getName() + ": " + e.getMessage() );
                 System.exit(0);
              }
-             System.out.println("Operation done successfully");
              return null;
         }
 

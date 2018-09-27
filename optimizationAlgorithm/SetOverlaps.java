@@ -20,6 +20,18 @@ class SetOverlaps
         return 0;
     }
 
+    private Node getNode(int id, Node nodes[]) 
+    {
+        for (int x = 0; x < nodes.length; x++) 
+        {
+            if (nodes[x].id == id) 
+            {
+                return nodes[x];
+            }
+        }
+        return null;
+    }
+
     public float getProbability(Node node_1, Node node_2, Node transition_node) 
     {
         float cost_1 = getCost(transition_node.id, node_1);
@@ -72,19 +84,8 @@ class SetOverlaps
             }
         }
         return overlaps;
-
     }
 
-    private Node getNode(int id, Node nodes[]) 
-    {
-        for (int x = 0; x < nodes.length; x++) 
-        {
-            if (nodes[x].id == id) 
-            {
-                return nodes[x];
-            }
-        }
-        return null;
-    }
+
 
 }
