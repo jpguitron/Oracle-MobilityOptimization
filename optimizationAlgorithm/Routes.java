@@ -71,22 +71,23 @@ public class Routes
 
     public double getAngle(Node node_i, Node node_d,Node node_t)
     {
-        float deltaX = node_i.lat - node_d.lat;
-        float deltaY = node_i.lon - node_d.lon;
+        double deltaX = node_i.lat - node_d.lat;
+        double deltaY = node_i.lon - node_d.lon;
 
         double angle_1 = Math.atan(deltaY/deltaX); 
-
+        
         if(deltaX < 0)
             angle_1 += Math.PI;
 
         deltaX = node_t.lat - node_d.lat;
         deltaY = node_t.lon - node_d.lon;
-
+        
+        
         double angle_2 = Math.atan(deltaY/deltaX);
         
         if(deltaX < 0)
             angle_2 += Math.PI;
-
+        
         double dif = Math.abs(angle_1-angle_2);
 
         while(dif > Math.PI)
@@ -114,7 +115,6 @@ public class Routes
             Node node_i_0 = getNode(initial_n[0], nodes);
             float smallestCost = getCost(transition_n[x], node_i_0);
             double smallAngle   = getAngle(node_d, node_i_0, node_t);
-            
             for(int y = 0; y < initial_n.length; y++)
             {
                 Node node_i         = getNode(initial_n[y],nodes);
@@ -133,12 +133,14 @@ public class Routes
                     smallAngleID = initial_n[y];
                 }
             }
+            //System.out.println("C: " + smallCostID + " - " + " A: " + smallAngleID);
             addToRoute(smallCostID, getNode(transition_n[x], nodes));
             if(smallCostID != smallAngleID)
             {
                 addToRoute(smallAngleID, getNode(transition_n[x], nodes));
             }
         }
+        
         
         /*
         for(int x = 0; x < transition_n.length; x++)

@@ -25,6 +25,7 @@ import io.jenetics.util.ISeq;
 
 //Other
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.text.DecimalFormat;
 /*import java.time.Duration;*/
 
@@ -49,10 +50,10 @@ public class MobilityOptimization
     
     //1st index = routeID
     //2nd index = nodesOfEachRoute
-    public static int[][] routeMap;                 //2D array for mapping natural integers - 0,1,... to ID values for each of the routes
-    public static Node[][] nodesPerRoute;           //2D array of assignable nodes per route
-                                     
-    public static int[] ownMapping;                 //Ownership mapping Index = Bit (from OwnChromosome), Value = NodeID 
+    public static int[][] routeMap;                         // 2D array for mapping natural integers - 0,1,... to ID values for each of the routes
+    public static Node[][] nodesPerRoute;                   // 2D array of assignable nodes per route
+    
+    public static HashMap <Integer, Integer> ownMapping;     // Map from nodeID to index for bit genotype
     
     //Function for evaluating route permutation genotypes (Permutation Chromosomes)
     private static double evalRoutePerm (Genotype<EnumGene<Integer>> routeGenotype) 
@@ -120,10 +121,8 @@ public class MobilityOptimization
             {
                 routeMap[x][i] = s.id;
                 nodesPerRoute[x][i] = routes.getNode(s.id, nodes);
-                System.out.print(nodesPerRoute[x][i].id+",");
                 i++;
             }
-            System.out.println();
             routeChromosomes.add(RouteChromosome.ofInteger(0,i,x));
         }
         
@@ -131,6 +130,13 @@ public class MobilityOptimization
         SetOverlaps _overlaps = new SetOverlaps();
         overlaps = _overlaps.getOverlaps(routes,startNodes,nodes);
         OwnChromosome.probsArray = getProbabilityArray(overlaps);
+        ownMapping = new HashMap<Integer, Integer>();
+        for (int i=0;i<overlaps.length;i++)
+        {
+            ownMapping.put(overlaps[i].overlap_node, i);
+        }
+        
+        
         
         // Initialize both genotype factories//
         final Factory<Genotype<EnumGene<Integer>>> routePermFactory = Genotype.of(routeChromosomes);

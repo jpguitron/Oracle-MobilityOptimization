@@ -9,10 +9,7 @@ public class GenotypeCost
     //Main function for calculating genotype cost//
     public static double calculate(Genotype<EnumGene<Integer>> routeGenotype, Genotype<BitGene> ownGenotype)
     {
-        //System.out.println("R: " + routeGenotype);
-        //System.out.println("O: " + ownGenotype);
         double cost = 0;
-                     
         for (int i=0; i<MobilityOptimization.startNodes.length; i++)                         // Loop through all routes
         {
             int routeID         = MobilityOptimization.startNodes[i];
@@ -33,7 +30,8 @@ public class GenotypeCost
                         // If node1 and bit == 0  OR node2 and bit == 1 dont add any cost (its added in the other route)
                         if(routeID == c_overlap.route_node_1)
                         {
-                            if(ownGenotype.getChromosome().getGene().getBit())
+                            int ownGenotypeIndex = MobilityOptimization.ownMapping.get(c_overlap.overlap_node);
+                            if(ownGenotype.getChromosome().getGene(ownGenotypeIndex).getBit())
                                 break;
 
                             else
@@ -44,7 +42,8 @@ public class GenotypeCost
                         }
                         else
                         {
-                            if(ownGenotype.getChromosome().getGene().getBit())
+                            int ownGenotypeIndex = MobilityOptimization.ownMapping.get(c_overlap.overlap_node);
+                            if(ownGenotype.getChromosome().getGene(ownGenotypeIndex).getBit())
                             {
                                 addCost = false;
                                 break;
@@ -63,10 +62,10 @@ public class GenotypeCost
                     current_node_id = next_node_id;
                     
                 }
-                /*else
+                else
                 {
-                    System.out.print(current_node_id + " - " + next_node_id);
-                }*/
+                    //System.out.println(current_node_id + " - " + next_node_id);
+                }
                 //System.out.println("\n");
             }
 
@@ -93,6 +92,7 @@ public class GenotypeCost
             MobilityOptimization.bestRoute = routeGenotype;
             MobilityOptimization.bestOwn   = ownGenotype;
         }
+        //System.exit(0);
         return cost;
     }
     
