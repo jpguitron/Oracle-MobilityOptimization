@@ -85,12 +85,10 @@ public class MobilityOptimization
     public static void run (int[] initialNodes, int finalNode, int[] transitionNodes , int generationSize, int numIterations, float crossProbability, float mutateProbability, float overlapAggressiveness) 
     {
         /*
-            TODO create custom chromosomes for route initialization
+            TODO balancing of assignable nodes to route points
+            TODO initialization for route genotypes
+            TODO improve GenotypeCost efficiency
             TODO set convergence criteria
-            TODO get overlap information from DB
-            TODO store best genotype information
-            TODO better initialization for initial cost
-            TODO show results in terms of time and distance
         */
         
         // SETUP GA variables
