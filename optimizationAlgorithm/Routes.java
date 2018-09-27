@@ -104,22 +104,63 @@ public class Routes
         
         for(int x = 0; x < transition_n.length; x++)
         {
+            Node node_t = getNode(transition_n[x],nodes);
+            //double[] angleDiff = new angleDiff[initial_n.length];   //Angle difference from this transition nodes to all initial nodes
+            //float [] costs     = new angleDiff[initial_n.length];   //Cost from this transition nodes to all initial nodess
+            
+            int smallCostID  = initial_n[0];
+            int smallAngleID = initial_n[0];
+            
+            Node node_i_0 = getNode(initial_n[0], nodes);
+            float smallestCost = getCost(transition_n[x], node_i_0);
+            double smallAngle   = getAngle(node_d, node_i_0, node_t);
+            
+            for(int y = 0; y < initial_n.length; y++)
+            {
+                Node node_i         = getNode(initial_n[y],nodes);
+                float currentCost   = getCost(transition_n[x], node_i);
+                double currentAngle = getAngle(node_d, node_i, node_t);
+                
+                if(currentCost<smallestCost)
+                {
+                    smallestCost = currentCost;
+                    smallCostID  = initial_n[y];
+                    
+                }
+                if(currentAngle < smallAngle)
+                {
+                    smallAngle   = currentAngle;
+                    smallAngleID = initial_n[y];
+                }
+            }
+            addToRoute(smallCostID, getNode(transition_n[x], nodes));
+            if(smallCostID != smallAngleID)
+            {
+                addToRoute(smallAngleID, getNode(transition_n[x], nodes));
+            }
+        }
+        
+        /*
+        for(int x = 0; x < transition_n.length; x++)
+        {
             int smallestId = initial_n[0];
             int secondSmallestId = -1; 
             float smallestCost = getCost(transition_n[x], getNode(initial_n[0], nodes));
             float secondSmallestCost = -1;
             float proportion = 0;
+            int smallestAngleID = initial_n[0];
             
             for(int y = 0; y < initial_n.length; y++)
             {
                 Node node = getNode(initial_n[y],nodes);
-
-                if(smallestCost > getCost(transition_n[x], node) || secondSmallestCost ==-1)
+                float currentCost = getCost(transition_n[x], node);
+                
+                if(smallestCost > currentCost || secondSmallestCost ==-1)
                 {
                     secondSmallestCost = smallestCost;
                     secondSmallestId = smallestId;
 
-                    smallestCost = getCost(transition_n[x], node);
+                    smallestCost = currentCost;
                     smallestId = initial_n[y];
                     
                     proportion = secondSmallestCost/smallestCost;
@@ -127,11 +168,13 @@ public class Routes
             }
 
             addToRoute(smallestId, getNode(transition_n[x], nodes));
+            
+            // Add if the node 
             if(proportion <= aggression)
             {
                 addToRoute(secondSmallestId, getNode(transition_n[x], nodes));
             }
             
-        }
+        }*/
     }
 }
