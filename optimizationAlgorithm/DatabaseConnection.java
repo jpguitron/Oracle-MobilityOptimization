@@ -119,9 +119,18 @@ public class DatabaseConnection
                     nodes[x] = new Node();
                     nodes[x].initalizeEdges(initialNodes.length,transitionNodes.length);
                 }
-                
+
                 int actual = rs.getInt("ID_S");
+                while(!contains(transitionNodes,actual))
+                {
+                    actual = rs.getInt("ID_S");
+                    rs.next();
+                }
+                
+
+
                 nodes[0].id = actual;
+
                 int contNodes = 0; 
     
                 int flag = 0;
@@ -168,7 +177,6 @@ public class DatabaseConnection
                             {
                                 if(actual == initialNodes[x])
                                 {
-                                    
                                     flag = 0;
                                     contNodes++;
                                     nodes[contNodes].id = actual;
@@ -180,18 +188,17 @@ public class DatabaseConnection
                                 
                                 if(actual == transitionNodes[x-initialNodes.length])
                                 {
-                                    
                                     flag = 1;
                                     contNodes++;
                                     nodes[contNodes].id = actual;
                                     break;
                                 }
                             }
-                            else if(actual == finalNode )
+                            else if(actual == finalNode)
                             {
-                                
                                 contNodes++;
                                 nodes[contNodes].id = actual;
+
                                 flag = 2;
                             }
                             else
