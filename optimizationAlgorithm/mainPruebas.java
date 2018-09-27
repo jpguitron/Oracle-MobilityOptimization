@@ -1,7 +1,12 @@
 package optimizationAlgorithm;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
 
 import optimizationAlgorithm.DatabaseConnection;
+import optimizationAlgorithm.Node;
 
 public class mainPruebas 
 {
@@ -15,10 +20,23 @@ public class mainPruebas
         DatabaseConnection data = new DatabaseConnection();
         Node[] w = data.nodes_matrix(b, c, a);
 
-        data.nodes_matrix_hashMap(b, c, a);
+        HashMap<Integer, Node> hmap = data.nodes_matrix_hashMap(b, c, a);
 
+        for(Map.Entry<Integer, Node> entry : hmap.entrySet()) 
+        {
+            int key = entry.getKey();
+            Node value = entry.getValue();
+            
+            for(Map.Entry<Integer, edge> ent : value.hmap.entrySet()) 
+            {
+                int key2 = ent.getKey();
+                edge value2 = ent.getValue();
+                System.out.println(key + " " + key2 + " "+value2.cost + " lat: "+value.lat+" lon: "+value.lon);
+            }
+        }
+        
 
-        for(int x = 0; x < w.length;x++) { for(int y = 0; y < w[x].TEdgeSize ;y++) 
+        /*for(int x = 0; x < w.length;x++) { for(int y = 0; y < w[x].TEdgeSize ;y++) 
         {
             System.out.print(w[x].id+" ");
             System.out.print(w[x].transitionEdges[y].dest+" ");
@@ -71,6 +89,6 @@ public class mainPruebas
 
         }
         
-        
+        */
     }
 }

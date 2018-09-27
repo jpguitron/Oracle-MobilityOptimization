@@ -49,55 +49,51 @@ public class DatabaseConnection
             int actual;
             int newActual;
             int id_e;
-            int distance;
-            int duration;
+            float distance;
+            float duration;
 
-            /*while(rs.next())
+            while(rs.next())
             {
                 actual = rs.getInt("ID_S");
                 newActual = actual;
 
 
-
                 if (contains(allNodes,actual)) 
                 {
-                    while(newActual == actual)
+                    while(rs.next())
                     {
+                        newActual = rs.getInt("ID_S");
                         id_e = rs.getInt("ID_E");
-                        distance = rs.getInt("distance");
-                        duration  = rs.getInt("duration");
+                        if(newActual != actual)
+                            break;
+                        
+                        distance = rs.getFloat("distance");
+                        duration  = rs.getFloat("duration");
                         
                         edge edg = new edge(id_e,duration,distance);
 
-                        hmap.get(actual).addEdge(actual, edg);
-
-                        rs.next();
-                        newActual = rs.getInt("ID_S");
+                        hmap.get(actual).addEdge(id_e, edg);
                     }
                 }
-            }*/
+            }
 
             
             rs.close();
-            /*
+
             rs = stmt.executeQuery( "SELECT * FROM LOCATIONS ORDER BY ID;" );
-            contNodes = 0;
             while(rs.next()) 
             {
-                int id = rs.getInt("ID");   
-                if(nodes[contNodes].id == id)
+                Node node = hmap.get(rs.getInt("ID"));
+                if( node != null)
                 {
-                    nodes[contNodes].lat = rs.getFloat("LAT");
-                    nodes[contNodes].lon = rs.getFloat("LON");
-                    contNodes++;
+                    node.lat = rs.getFloat("LAT");
+                    node.lon = rs.getFloat("LON");
                 }
             }
             
             stmt.close();
             disconnect(conn);
 
-
-            */
             return hmap;
          } 
          catch ( Exception e ) 
