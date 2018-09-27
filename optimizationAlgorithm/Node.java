@@ -1,5 +1,11 @@
 package optimizationAlgorithm;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+import java.util.Set;
+
+
 class edge
 {
     int dest;
@@ -13,6 +19,15 @@ class edge
         dist_cost = 0;
         cost = 0;
     }
+
+    public edge(int d, float t_c, float d_c)
+    {
+        dest = d;
+        time_cost = t_c;
+        dist_cost = d_c;
+        cost = time_cost + dist_cost/100;
+    }
+
     public void setEdge(int d, float t_c, float d_c)
     {
         dest = d;
@@ -24,6 +39,9 @@ class edge
 
 public class Node 
 {
+
+    HashMap<Integer, edge> hmap = new HashMap<Integer, edge>();
+
     public float lat;
     public float lon;
     public int id;
@@ -87,6 +105,11 @@ public class Node
         }
         
 
+    }
+
+    public void addEdge(int id,edge e)
+    {
+        hmap.put(id,e);
     }
 
 }

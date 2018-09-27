@@ -13,6 +13,15 @@ import java.sql.*;
 
 public class DatabaseConnection 
 {
+    private static boolean contains(int arr[], int numToFind)
+    {
+        for(int x = 0; x < arr.length; x++)
+        {
+            if(arr[x] == numToFind)
+                return true;
+        }
+        return false;
+    }
     public static HashMap<Integer, Node> nodes_matrix_hashMap(int initialNodes[],int finalNode, int transitionNodes[])
     {
         HashMap<Integer, Node> hmap = new HashMap<Integer, Node>();
@@ -28,29 +37,49 @@ public class DatabaseConnection
             hmap.put(allNodes[x],node);
         }
 
-        /*Statement stmt = null;
+        Statement stmt = null;
         Connection conn = connect();
         
         try 
         {
+
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery( "SELECT * FROM DISTANCES WHERE ID_S != ID_E ORDER BY ID_S;" );
 
+            int actual;
+            int newActual;
+            int id_e;
+            int distance;
+            int duration;
 
-            if ( ArrayUtils.contains( fieldsToInclude, "id" ) ) 
+            /*while(rs.next())
             {
-                // Do some stuff.
-            }
+                actual = rs.getInt("ID_S");
+                newActual = actual;
+
+
+
+                if (contains(allNodes,actual)) 
+                {
+                    while(newActual == actual)
+                    {
+                        id_e = rs.getInt("ID_E");
+                        distance = rs.getInt("distance");
+                        duration  = rs.getInt("duration");
+                        
+                        edge edg = new edge(id_e,duration,distance);
+
+                        hmap.get(actual).addEdge(actual, edg);
+
+                        rs.next();
+                        newActual = rs.getInt("ID_S");
+                    }
+                }
+            }*/
+
             
-            int actual = rs.getInt("ID_S");
-            nodes[0].id = actual;
-
-            while(rs.next()) 
-            {
-               
-            }
             rs.close();
-
+            /*
             rs = stmt.executeQuery( "SELECT * FROM LOCATIONS ORDER BY ID;" );
             contNodes = 0;
             while(rs.next()) 
@@ -68,7 +97,7 @@ public class DatabaseConnection
             disconnect(conn);
 
 
-
+            */
             return hmap;
          } 
          catch ( Exception e ) 
@@ -76,7 +105,7 @@ public class DatabaseConnection
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
          }
-         */
+         
          return null;
         }
         
@@ -135,8 +164,8 @@ public class DatabaseConnection
                    
                    int id_s = rs.getInt("ID_S");
                    int id_e = rs.getInt("ID_E");
-                   int distance = rs.getInt("distance");
-                   int duration  = rs.getInt("duration");
+                   float distance = rs.getInt("distance");
+                   float duration  = rs.getInt("duration");
     
                    if(actual != id_s)
                    {
@@ -220,6 +249,21 @@ public class DatabaseConnection
                 }
                 
                 rs.close();
+
+                rs = stmt.executeQuery( "SELECT * FROM LOCATIONS ORDER BY ID;" );
+                contNodes = 0;
+                while(rs.next()) 
+                {
+                    int id = rs.getInt("ID");   
+                    if(nodes[contNodes].id == id)
+                    {
+                        nodes[contNodes].lat = rs.getFloat("LAT");
+                        nodes[contNodes].lon = rs.getFloat("LON");
+                        contNodes++;
+                    }
+                }
+    
+
                 stmt.close();
                 disconnect(conn);
                 return nodes;

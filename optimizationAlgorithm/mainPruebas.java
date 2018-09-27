@@ -1,5 +1,8 @@
 package optimizationAlgorithm;
 
+
+import optimizationAlgorithm.DatabaseConnection;
+
 public class mainPruebas 
 {
     public static void main(String[] args) 
@@ -11,6 +14,8 @@ public class mainPruebas
 
         DatabaseConnection data = new DatabaseConnection();
         Node[] w = data.nodes_matrix(b, c, a);
+
+        data.nodes_matrix_hashMap(b, c, a);
 
 
         for(int x = 0; x < w.length;x++) { for(int y = 0; y < w[x].TEdgeSize ;y++) 
