@@ -76,8 +76,8 @@ public class DatabaseConnection
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
             System.exit(0);
          }
-
-         return null;*/
+         */
+         return null;
         }
         
     

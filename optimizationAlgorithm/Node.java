@@ -27,8 +27,12 @@ public class Node
     public float lat;
     public float lon;
     public int id;
-    public HashMap<Integer, edge> hmap = new HashMap<Integer, edge>();
+    public edge destEdge; 
+    public edge initialEdges[];
+    public edge transitionEdges[]; 
+    
     public int IEdgeSize;
+    public int TEdgeSize;
 
     public Node() 
     {
@@ -48,16 +52,41 @@ public class Node
 
     public void initalizeEdges(int ISize,int TSize ) 
     {
-
+        initialEdges = new edge[ISize];
+        transitionEdges = new edge[TSize];
     }
 
-    public void addEdge(int dest, float time_cost, float dist_cost)
+    public void addIEdge(int dest, float time_cost, float dist_cost)
     {   
         
         if(IEdgeSize < initialEdges.length)
         {
-
+            initialEdges[IEdgeSize] = new edge();
+            initialEdges[IEdgeSize].setEdge(dest,time_cost,dist_cost);
+            IEdgeSize++;
         }
         
     }
+    public void addTEdge(int dest, float time_cost, float dist_cost)
+    {
+        
+        if(TEdgeSize < transitionEdges.length)
+        {
+            transitionEdges[TEdgeSize] = new edge();
+            transitionEdges[TEdgeSize].setEdge(dest,time_cost,dist_cost);
+            TEdgeSize++;
+        }
+        
+    }
+    public void addDEdge(int dest, float time_cost, float dist_cost)
+    {
+        if(destEdge == null)
+        {
+            destEdge = new edge();
+            destEdge.setEdge(dest,time_cost,dist_cost);
+        }
+        
+
+    }
+
 }
