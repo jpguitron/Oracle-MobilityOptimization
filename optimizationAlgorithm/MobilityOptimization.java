@@ -44,13 +44,14 @@ public class MobilityOptimization
     public static int[] startNodes;     // StartNodesIDs
     public static int destNode;         // DestNodeID
     
-    public static Routes routes;                //Variable for storign Routes
+    public static Routes routes;        //Variable for storign Routes
     
-    //2D array for mapping natural integers - 0,1,... to ID values for each of the routes
+    
     //1st index = routeID
     //2nd index = nodesOfEachRoute
-    public static int[][] routeMap;
-    
+    public static int[][] routeMap;                 //2D array for mapping natural integers - 0,1,... to ID values for each of the routes
+    public static Node[][] nodesPerRoute;           //2D array of assignable nodes per route
+                                        
     //Function for evaluating route permutation genotypes (Permutation Chromosomes)
     private static double evalRoutePerm (Genotype<EnumGene<Integer>> routeGenotype) 
     {   
@@ -87,7 +88,7 @@ public class MobilityOptimization
     public static void run (int[] initialNodes, int finalNode, int[] transitionNodes , int generationSize, int numIterations, float crossProbability, float mutateProbability, float overlapAggressiveness) 
     {
         /*
-            TODO balancing of assignable nodes to route points
+            TODO balancing of assignable nodes to route
             TODO initialization for route genotypes
             TODO improve GenotypeCost efficiency (getCost function from Route Class)
             TODO set convergence criteria
@@ -95,10 +96,7 @@ public class MobilityOptimization
         
         // SETUP GA variables
         nodes = DatabaseConnection.nodes_matrix(initialNodes, finalNode, transitionNodes);
-        
-        
-        //Set default parameter values for custom chromosomes
-        RouteChromosome.defaultAgg = overlapAggressiveness;
+
         
         //Set start and dest nodes info
         startNodes = initialNodes;
@@ -109,18 +107,22 @@ public class MobilityOptimization
         routes.nodes_route(startNodes, transitionNodes, destNode, nodes, overlapAggressiveness);
         routeMap = new int[routes.routes.length][];
         ArrayList<Chromosome<EnumGene<Integer>>> routeChromosomes = new ArrayList<Chromosome<EnumGene<Integer>>>();
-        Node [] nodesPerRoute;
+        nodesPerRoute = new Node[routes.routes.length][];
         
         for(int x = 0; x < routes.routes.length; x++)
         {   
+            nodesPerRoute[x] = new Node[routes.routes[x].hash_Set.size()];
             routeMap[x] = new int[routes.routes[x].hash_Set.size()];
             int i = 0;
             for (Node s : routes.routes[x].hash_Set) 
             {
                 routeMap[x][i] = s.id;
+                nodesPerRoute[x][i] = routes.getNode(s.id, nodes);
+                System.out.print(nodesPerRoute[x][i].id+",");
                 i++;
             }
-            routeChromosomes.add(RouteChromosome.ofInteger(0,i,RouteChromosome.defaultAgg));
+            System.out.println();
+            routeChromosomes.add(RouteChromosome.ofInteger(0,i,x));
         }
         
         //Get overlap info

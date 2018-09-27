@@ -68,17 +68,20 @@ public class GenotypeCost
                     System.out.print(current_node_id + " - " + next_node_id);
                 }*/
                 //System.out.println("\n");
-                System.out.print(current_node_id + ",");
             }
-            System.out.println();
-            System.out.println("Last: " + current_node_id);
+
             //Add cost to last node manually
             for(Node node : MobilityOptimization.nodes)
             {
                 if(node.id == current_node_id)
                 {
                     //System.out.println("CF: " + node.destEdge.cost);
-                    cost += node.destEdge.cost;
+                    // if current node is a starter node add a very big cost to avoid this situation
+                    if (current_node_id == routeID)
+                        cost += 999999999;
+                    
+                    else
+                        cost += node.destEdge.cost;
                     break;
                 }
             }

@@ -33,7 +33,7 @@ public class Routes
         }
     }
 
-    private Node getNode(int id, Node nodes[])
+    public Node getNode(int id, Node nodes[])
     {
         for(int x = 0; x < nodes.length; x++)
         {

@@ -34,9 +34,7 @@ public final class RouteChromosome<T>
 	implements Serializable
 {
 	private static final long serialVersionUID = 2L;
-    
-    //Default aggressiveness value for new instances//
-	public static float defaultAgg;
+	
 	
 	private ISeq<T> _validAlleles;
 	
@@ -72,9 +70,9 @@ public final class RouteChromosome<T>
 
 	@Override
 	public RouteChromosome<T> newInstance() {
-		return of(_validAlleles, length(), defaultAgg);
+		return of(_validAlleles, length());
 	}
-
+    
 	@Override
 	public RouteChromosome<T> newInstance(final ISeq<EnumGene<T>> genes) {
 		return new RouteChromosome<>(genes);
@@ -103,7 +101,51 @@ public final class RouteChromosome<T>
 	public static <T> RouteChromosome<T> of(
 		final ISeq<? extends T> alleles,
 		final int length,
-		final float aggressiveness
+		final int routeIndex
+	) {
+		require.positive(length);
+		if (length > alleles.size()) {
+			throw new IllegalArgumentException(format(
+				"The sub-set size must be be greater then the base-set: %d > %d",
+				length, alleles.size()
+			));
+		}
+
+		//final int[] subset = array.shuffle(comb.subset(alleles.size(), length));
+		
+		// Fill Chromosome in subset
+		int[] subset = new int[length];
+		routeID   = MobilityOptimization.startNodes[0]; 
+		subset[0] = 
+		for (int i=0;i<length;i++)
+		{
+            subset[i] = i;
+		}
+		
+		final ISeq<EnumGene<T>> genes = IntStream.of(subset)
+			.mapToObj(i -> EnumGene.<T>of(i, alleles))
+			.collect(ISeq.toISeq());
+        
+        Node[] nodes = MobilityOptimization.nodesPerRoute[routeIndex];
+        for (int i=0;i<nodes.length;i++)
+        {
+            System.out.print(nodes[i].id+",");
+        }
+        System.out.println();
+        System.out.println(genes);
+        System.exit(0);
+			
+		return new RouteChromosome<>(genes, true);
+	}
+
+    
+    /*
+    TODO receive routeIndex here as well
+    */
+	///////////////////////////////////////NEW INSTANCE WITH RANDOM PERMUTATION///////////////////////////
+		public static <T> RouteChromosome<T> of(
+		final ISeq<? extends T> alleles,
+		final int length
 	) {
 		require.positive(length);
 		if (length > alleles.size()) {
@@ -117,30 +159,29 @@ public final class RouteChromosome<T>
 		final ISeq<EnumGene<T>> genes = IntStream.of(subset)
 			.mapToObj(i -> EnumGene.<T>of(i, alleles))
 			.collect(ISeq.toISeq());
-
 		return new RouteChromosome<>(genes, true);
 	}
-
+	
 	///////////////////////////////////////////////////////////////////////////////
 	
 	public static RouteChromosome<Integer>
-	ofInteger(final int start, final int end, final float aggressiveness) {
+	ofInteger(final int start, final int end, final int routeIndex) {
 		if (end <= start) {
 			throw new IllegalArgumentException(format(
 				"end <= start: %d <= %d", end, start
 			));
 		}
 
-		return ofInteger(IntRange.of(start, end), end - start, aggressiveness);
+		return ofInteger(IntRange.of(start, end), end - start, routeIndex);
 	}
 
 	public static RouteChromosome<Integer>
-	ofInteger(final IntRange range, final int length, final float aggressiveness) {
+	ofInteger(final IntRange range, final int length, final int routeIndex) {
 		return of(
 			range.stream()
 				.boxed()
 				.collect(ISeq.toISeq()),
-			length, aggressiveness
+			length, routeIndex
 		);
 	}
 
