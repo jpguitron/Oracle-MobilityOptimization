@@ -186,7 +186,7 @@ public class DatabaseConnection
                                     break;
                                 }
                             }
-                            else if(actual == finalNode && x < allNodes - 1)
+                            else if(actual == finalNode)
                             {
                                 
                                 contNodes++;
