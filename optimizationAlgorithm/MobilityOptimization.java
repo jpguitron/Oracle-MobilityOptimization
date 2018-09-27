@@ -25,6 +25,7 @@ import io.jenetics.util.ISeq;
 
 //Other
 import java.util.ArrayList;
+import java.text.DecimalFormat;
 /*import java.time.Duration;*/
 
 public class MobilityOptimization
@@ -156,12 +157,23 @@ public class MobilityOptimization
         System.out.println("-----------");
         System.out.println("Route Stats");
         System.out.println("-----------");
-        System.out.println("R1: " + " Time: " + " Distance: " + " Cost");
+    
+        DecimalFormat decimalFormat = new DecimalFormat("#.###");
+        double routeStats[] = new double[3];
+        double totalTime = 0;
+        double totalDistance = 0;
+        for (int i=0;i<startNodes.length;i++)
+        {
+            routeStats = RouteResults.getRouteStats(i, bestRoute.getChromosome(i), bestOwn);
+            totalTime += routeStats[0];
+            totalDistance += routeStats[1];
+            System.out.println("R" + i + " Time: " + decimalFormat.format(routeStats[0]/3600) + "hrs,   Distance: " + decimalFormat.format(routeStats[1]/1000) + "kms,   Cost: " + decimalFormat.format(routeStats[2]));
+        }
 
         System.out.println();
-        System.out.println("Total Time: ");
-        System.out.println("Total Distance: ");
-        System.out.println("Total Cost: " + bestGenotypeCost);
+        System.out.println("Total Time: " + decimalFormat.format(totalTime/3600) + " hrs");
+        System.out.println("Total Distance: " + decimalFormat.format(totalDistance/1000) + " kms");
+        System.out.println("Total Cost: " + decimalFormat.format(bestGenotypeCost));
         System.out.println();
     }
     
@@ -197,13 +209,6 @@ public class MobilityOptimization
         }
         return result;
     }
-    
-    
-    
-    
-    
-    
-    
 }
 /*Engine<EnumGene<Integer>, Double> engineRoute = Engine.builder(MobilityOptimization::evalRoutePerm, routePermFactory)
                                             .populationSize(generationSize)

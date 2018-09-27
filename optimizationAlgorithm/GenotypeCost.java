@@ -95,7 +95,7 @@ public class GenotypeCost
     TODO improve this
     */
     //Helper function for adding cost between to nodes//
-    private static double getCost(int c_node, int n_node)
+    public static double getCost(int c_node, int n_node)
     {
         for(Node node : MobilityOptimization.nodes)
         {
@@ -113,5 +113,28 @@ public class GenotypeCost
             }
         }
         return 0.0;
+    }
+    
+    //Helper function for getting time and distance between two nodes//
+    public static double[] getStats(int c_node, int n_node)
+    {
+        double[] stats = new double[2];
+        for(Node node : MobilityOptimization.nodes)
+        {
+            if(node.id == c_node)
+            {
+                for (int k=0;k<node.TEdgeSize; k++)
+                {
+                    edge _edge = node.transitionEdges[k];
+                    if(_edge.dest == n_node)
+                    {
+                        stats[0] = _edge.time_cost;
+                        stats[1] = _edge.dist_cost;
+                        return stats;
+                    }
+                }
+            }
+        }
+        return stats;
     }
 }
