@@ -52,7 +52,7 @@ public class MobilityOptimization
     public static int[][] routeMap;                 //2D array for mapping natural integers - 0,1,... to ID values for each of the routes
     public static Node[][] nodesPerRoute;           //2D array of assignable nodes per route
                                      
-    //public static int[] ownMapping;                 //Ownership mapping Index = Bit
+    public static int[] ownMapping;                 //Ownership mapping Index = Bit (from OwnChromosome), Value = NodeID 
     
     //Function for evaluating route permutation genotypes (Permutation Chromosomes)
     private static double evalRoutePerm (Genotype<EnumGene<Integer>> routeGenotype) 
