@@ -250,7 +250,6 @@ public class OwnChromosome extends Number
 				}
 			}
 		}
-
 		chromosome._p = (double)ones/(double)genes.length();
 		return chromosome;
 	}

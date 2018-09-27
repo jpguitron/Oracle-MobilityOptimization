@@ -35,8 +35,8 @@ public final class RouteChromosome<T>
 {
 	private static final long serialVersionUID = 2L;
 	
-	
 	private ISeq<T> _validAlleles;
+	private int routeIndex;
 	
 	// Private primary constructor.
 	private RouteChromosome(
@@ -101,7 +101,7 @@ public final class RouteChromosome<T>
 	public static <T> RouteChromosome<T> of(
 		final ISeq<? extends T> alleles,
 		final int length,
-		final int routeIndex
+		final int rIndex
 	) {
 		require.positive(length);
 		if (length > alleles.size()) {
@@ -111,11 +111,16 @@ public final class RouteChromosome<T>
 			));
 		}
 
-		final int[] subset = array.shuffle(comb.subset(alleles.size(), length));
+		//final int[] subset = array.shuffle(comb.subset(alleles.size(), length));
+		
+    
 		
 		// Fill Chromosome in subset
-		//int[] subset = new int[length];
-		//routeID   = MobilityOptimization.startNodes[0]; 
+		int[] subset = new int[length];
+		
+		
+		
+		
 		//subset[0] = 
 		/*for (int i=0;i<length;i++)
 		{
@@ -126,14 +131,23 @@ public final class RouteChromosome<T>
 			.mapToObj(i -> EnumGene.<T>of(i, alleles))
 			.collect(ISeq.toISeq());
         
-        /*Node[] nodes = MobilityOptimization.nodesPerRoute[routeIndex];
-        for (int i=0;i<nodes.length;i++)
+        Node[] nodes    = MobilityOptimization.nodesPerRoute[rIndex];
+        double[] scores = new double[nodes.length];                        //Scores array (for selection probability of next node)
+        
+        //Number of times to add elements
+        /*for (int i=0;i<nodes.length;i++)
         {
+            scores[i] = 
+            //See which element to add next
+            for(int j=1;j<nodes.length;j++)
+            {
+                
+            }
             System.out.print(nodes[i].id+",");
-        }
-        System.out.println();
-        System.out.println(genes);
-        System.exit(0);*/
+        }*/
+        //System.out.println();
+        //System.out.println(genes);
+        //System.exit(0);
 			
 		return new RouteChromosome<>(genes, true);
 	}
@@ -165,23 +179,23 @@ public final class RouteChromosome<T>
 	///////////////////////////////////////////////////////////////////////////////
 	
 	public static RouteChromosome<Integer>
-	ofInteger(final int start, final int end, final int routeIndex) {
+	ofInteger(final int start, final int end, final int rIndex) {
 		if (end <= start) {
 			throw new IllegalArgumentException(format(
 				"end <= start: %d <= %d", end, start
 			));
 		}
 
-		return ofInteger(IntRange.of(start, end), end - start, routeIndex);
+		return ofInteger(IntRange.of(start, end), end - start, rIndex);
 	}
 
 	public static RouteChromosome<Integer>
-	ofInteger(final IntRange range, final int length, final int routeIndex) {
+	ofInteger(final IntRange range, final int length, final int rIndex) {
 		return of(
 			range.stream()
 				.boxed()
 				.collect(ISeq.toISeq()),
-			length, routeIndex
+			length, rIndex
 		);
 	}
 
