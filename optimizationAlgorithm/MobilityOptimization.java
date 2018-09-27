@@ -104,7 +104,7 @@ public class MobilityOptimization
         
         //Get routes info
         Routes routes = new Routes(startNodes);
-        routes.nodes_route(startNodes, transitionNodes, destNode, nodes);
+        routes.nodes_route(startNodes, transitionNodes, destNode, nodes, overlapAggressiveness);
         routeMap = new int[routes.routes.length][];
         ArrayList<Chromosome<EnumGene<Integer>>> routeChromosomes = new ArrayList<Chromosome<EnumGene<Integer>>>();
         for(int x = 0; x < routes.routes.length; x++)

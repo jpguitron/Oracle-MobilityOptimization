@@ -19,7 +19,6 @@ class Route
 }
 public class Routes 
 {
-    float aggression = 1.2f; //Set aggression for the nodes
     public Route routes[];
 
     public Routes(int routesId[]) 
@@ -69,7 +68,7 @@ public class Routes
         }
     }
 
-    public void nodes_route(int initial_n[],int transition_n[], int dest_n, Node nodes[])
+    public void nodes_route(int initial_n[],int transition_n[], int dest_n, Node nodes[], float aggression) //Aggression parameters for assigningnodes
     {
         for(int x = 0; x < transition_n.length; x++)
         {

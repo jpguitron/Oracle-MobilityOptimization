@@ -39,7 +39,7 @@ public class mainPruebas
          */
 
         Routes rutas = new Routes(b);
-        rutas.nodes_route(b, a, c, w);
+        rutas.nodes_route(b, a, c, w, 1.5f);
 
         SetOverlaps overlaps = new SetOverlaps();
         Overlap over[] = overlaps.getOverlaps(rutas,b,w);
