@@ -111,29 +111,29 @@ public final class RouteChromosome<T>
 			));
 		}
 
-		//final int[] subset = array.shuffle(comb.subset(alleles.size(), length));
+		final int[] subset = array.shuffle(comb.subset(alleles.size(), length));
 		
 		// Fill Chromosome in subset
-		int[] subset = new int[length];
-		routeID   = MobilityOptimization.startNodes[0]; 
-		subset[0] = 
-		for (int i=0;i<length;i++)
+		//int[] subset = new int[length];
+		//routeID   = MobilityOptimization.startNodes[0]; 
+		//subset[0] = 
+		/*for (int i=0;i<length;i++)
 		{
             subset[i] = i;
-		}
+		}*/
 		
 		final ISeq<EnumGene<T>> genes = IntStream.of(subset)
 			.mapToObj(i -> EnumGene.<T>of(i, alleles))
 			.collect(ISeq.toISeq());
         
-        Node[] nodes = MobilityOptimization.nodesPerRoute[routeIndex];
+        /*Node[] nodes = MobilityOptimization.nodesPerRoute[routeIndex];
         for (int i=0;i<nodes.length;i++)
         {
             System.out.print(nodes[i].id+",");
         }
         System.out.println();
         System.out.println(genes);
-        System.exit(0);
+        System.exit(0);*/
 			
 		return new RouteChromosome<>(genes, true);
 	}

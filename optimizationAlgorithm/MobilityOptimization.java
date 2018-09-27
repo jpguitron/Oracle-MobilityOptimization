@@ -51,7 +51,9 @@ public class MobilityOptimization
     //2nd index = nodesOfEachRoute
     public static int[][] routeMap;                 //2D array for mapping natural integers - 0,1,... to ID values for each of the routes
     public static Node[][] nodesPerRoute;           //2D array of assignable nodes per route
-                                        
+                                     
+    //public static int[] ownMapping;                 //Ownership mapping Index = Bit
+    
     //Function for evaluating route permutation genotypes (Permutation Chromosomes)
     private static double evalRoutePerm (Genotype<EnumGene<Integer>> routeGenotype) 
     {   
@@ -213,6 +215,32 @@ public class MobilityOptimization
         }
         return result;
     }
+    
+    //Print result taking ownerships into account
+    /*private static String getRouteResult(Genotype<EnumGene<Integer>> routeGenotype, Genotype<EnumGene<Integer>> ownGenotype)
+    {
+        String result = "";
+        
+        for (int i=0;i<genotype.length();i++)
+        {
+            Chromosome<EnumGene<Integer>> chromosome = genotype.getChromosome(i);
+            for (int j=0;j<chromosome.length();j++)
+            {
+                int index  = chromosome.getGene(j).getAllele();
+                int nodeID = routeMap[i][index]; 
+                
+                //if(ownGenotype)
+                //{
+                    result += Integer.toString(nodeID);
+                    if(j<chromosome.length()-1)
+                        result+="|";
+                //}
+            }
+            result+="\n";
+        }
+        return result;
+    }*/
+    
 }
 /*Engine<EnumGene<Integer>, Double> engineRoute = Engine.builder(MobilityOptimization::evalRoutePerm, routePermFactory)
                                             .populationSize(generationSize)
