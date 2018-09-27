@@ -20,7 +20,7 @@ public class mainPruebas
         DatabaseConnection data = new DatabaseConnection();
         Node[] w = data.nodes_matrix(b, c, a);
 
-        /*HashMap<Integer, Node> hmap = data.nodes_matrix_hashMap(b, c, a);
+        HashMap<Integer, Node> hmap = data.nodes_matrix_hashMap(b, c, a);
 
         for(Map.Entry<Integer, Node> entry : hmap.entrySet()) 
         {
@@ -33,9 +33,9 @@ public class mainPruebas
                 edge value2 = ent.getValue();
                 System.out.println(key + " " + key2 + " "+value2.cost + " lat: "+value.lat+" lon: "+value.lon);
             }
-        }*/
+        }
         
-
+        /*
         for(int x = 0; x < w.length;x++) { for(int y = 0; y < w[x].TEdgeSize ;y++) 
         {
             System.out.print(w[x].id+" ");
@@ -70,7 +70,7 @@ public class mainPruebas
         }
          
         System.out.println("------------------------------"); }
-         /*
+         
 
 
 

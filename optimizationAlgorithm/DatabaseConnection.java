@@ -35,6 +35,7 @@ public class DatabaseConnection
         for(int x = 0; x < allNodes.length; x++)
         {
             Node node = new Node();
+            node.id = allNodes[x];
             hmap.put(allNodes[x],node);
         }
 
@@ -186,7 +187,7 @@ public class DatabaseConnection
                                     break;
                                 }
                             }
-                            else if(actual == finalNode)
+                            else if(actual == finalNode )
                             {
                                 
                                 contNodes++;
