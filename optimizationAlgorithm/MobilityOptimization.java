@@ -44,6 +44,8 @@ public class MobilityOptimization
     public static int[] startNodes;     // StartNodesIDs
     public static int destNode;         // DestNodeID
     
+    public static Routes routes;                //Variable for storign Routes
+    
     //2D array for mapping natural integers - 0,1,... to ID values for each of the routes
     //1st index = routeID
     //2nd index = nodesOfEachRoute
@@ -87,7 +89,7 @@ public class MobilityOptimization
         /*
             TODO balancing of assignable nodes to route points
             TODO initialization for route genotypes
-            TODO improve GenotypeCost efficiency
+            TODO improve GenotypeCost efficiency (getCost function from Route Class)
             TODO set convergence criteria
         */
         
@@ -103,10 +105,12 @@ public class MobilityOptimization
         destNode   = finalNode;
         
         //Get routes info
-        Routes routes = new Routes(startNodes);
+        routes = new Routes(startNodes);
         routes.nodes_route(startNodes, transitionNodes, destNode, nodes, overlapAggressiveness);
         routeMap = new int[routes.routes.length][];
         ArrayList<Chromosome<EnumGene<Integer>>> routeChromosomes = new ArrayList<Chromosome<EnumGene<Integer>>>();
+        Node [] nodesPerRoute;
+        
         for(int x = 0; x < routes.routes.length; x++)
         {   
             routeMap[x] = new int[routes.routes[x].hash_Set.size()];
