@@ -54,6 +54,7 @@ public class MobilityOptimization
     public static Node[][] nodesPerRoute;                   // 2D array of assignable nodes per route
     
     public static HashMap <Integer, Integer> ownMapping;     // Map from nodeID to index for bit genotype
+    public static HashMap <Integer, Overlap> overlapMapping; // Map from nodeID to Overlap object
     
     //Function for evaluating route permutation genotypes (Permutation Chromosomes)
     private static double evalRoutePerm (Genotype<EnumGene<Integer>> routeGenotype) 
@@ -127,16 +128,16 @@ public class MobilityOptimization
         }
         
         //Get overlap info
-        SetOverlaps _overlaps = new SetOverlaps();
-        overlaps = _overlaps.getOverlaps(routes,startNodes,nodes);
+        SetOverlaps _overlaps    = new SetOverlaps();
+        overlaps                 = _overlaps.getOverlaps(routes,startNodes,nodes);
         OwnChromosome.probsArray = getProbabilityArray(overlaps);
-        ownMapping = new HashMap<Integer, Integer>();
+        ownMapping               = new HashMap<Integer, Integer>();
+        overlapMapping           = new HashMap<Integer, Overlap>();
         for (int i=0;i<overlaps.length;i++)
         {
             ownMapping.put(overlaps[i].overlap_node, i);
+            overlapMapping.put(overlaps[i].overlap_node, overlaps[i]);
         }
-        
-        
         
         // Initialize both genotype factories//
         final Factory<Genotype<EnumGene<Integer>>> routePermFactory = Genotype.of(routeChromosomes);
@@ -161,10 +162,7 @@ public class MobilityOptimization
         System.out.println("Solution");
         System.out.println("--------");
         System.out.println();
-        System.out.println("Route Genotype: ");
-        System.out.println(getRouteResult(bestRoute) + "\n");
-        System.out.println("Ownership Genotype:");
-        System.out.println(bestOwn + "\n");
+        System.out.println(getStringResult(bestRoute, bestOwn));
 
         System.out.println("-----------");
         System.out.println("Route Stats");
@@ -187,6 +185,7 @@ public class MobilityOptimization
         System.out.println("Total Distance: " + decimalFormat.format(totalDistance/1000) + " kms");
         System.out.println("Total Cost: " + decimalFormat.format(bestGenotypeCost));
         System.out.println();
+        
     }
     
     
@@ -223,29 +222,49 @@ public class MobilityOptimization
     }
     
     //Print result taking ownerships into account
-    /*private static String getRouteResult(Genotype<EnumGene<Integer>> routeGenotype, Genotype<EnumGene<Integer>> ownGenotype)
+    private static String getStringResult(Genotype<EnumGene<Integer>> routeGenotype, Genotype<BitGene> ownGenotype)
     {
         String result = "";
         
-        for (int i=0;i<genotype.length();i++)
+        for (int i=0;i<routeGenotype.length();i++)
         {
-            Chromosome<EnumGene<Integer>> chromosome = genotype.getChromosome(i);
+            result+=Integer.toString(startNodes[i]) + "|";
+            Chromosome<EnumGene<Integer>> chromosome = routeGenotype.getChromosome(i);
             for (int j=0;j<chromosome.length();j++)
             {
                 int index  = chromosome.getGene(j).getAllele();
                 int nodeID = routeMap[i][index]; 
-                
-                //if(ownGenotype)
-                //{
+                    
+                if(ownMapping.containsKey(nodeID))
+                {
+                    int ownGenotypeIndex = ownMapping.get(nodeID);
+                    
+                    // If node1 and bit == 1  OR node2 and bit == 0 add node to this route
+                    if(startNodes[i] == overlapMapping.get(nodeID).route_node_1)
+                    {
+                        if(ownGenotype.getChromosome().getGene(ownGenotypeIndex).getAllele())
+                        {
+                            result += Integer.toString(nodeID);
+                            result+="|";
+                        }
+                    }
+                    else if(!ownGenotype.getChromosome().getGene(ownGenotypeIndex).getAllele())
+                    {
+                            result += Integer.toString(nodeID);
+                            result+="|";
+                    }
+                }
+                else
+                {
                     result += Integer.toString(nodeID);
-                    if(j<chromosome.length()-1)
-                        result+="|";
-                //}
+                    result+="|";
+                }
             }
+            result+=Integer.toString(destNode);
             result+="\n";
         }
         return result;
-    }*/
+    }
     
 }
 /*Engine<EnumGene<Integer>, Double> engineRoute = Engine.builder(MobilityOptimization::evalRoutePerm, routePermFactory)

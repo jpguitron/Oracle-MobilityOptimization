@@ -154,7 +154,7 @@ public final class RouteChromosome<T>
 				length, alleles.size()
 			));
 		}
-
+        //System.out.println("New");
 		final int[] subset = array.shuffle(comb.subset(alleles.size(), length));
 		final ISeq<EnumGene<T>> genes = IntStream.of(subset)
 			.mapToObj(i -> EnumGene.<T>of(i, alleles))
