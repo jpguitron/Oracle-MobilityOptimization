@@ -40,7 +40,7 @@ class edge
 public class Node 
 {
 
-    HashMap<Integer, edge> hmap = new HashMap<Integer, edge>();
+    public HashMap<Integer, edge> hmap = new HashMap<Integer, edge>();
 
     public float lat;
     public float lon;
