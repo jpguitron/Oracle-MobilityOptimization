@@ -55,6 +55,8 @@ public class MobilityOptimization
     
     public static HashMap <Integer, Integer> ownMapping;     // Map from nodeID to index for bit genotype
     public static HashMap <Integer, Overlap> overlapMapping; // Map from nodeID to Overlap object
+    public static HashMap <Integer, Node>    nodeMapping;    // Map from nodeID to Node object
+    
     
     //Function for evaluating route permutation genotypes (Permutation Chromosomes)
     private static double evalRoutePerm (Genotype<EnumGene<Integer>> routeGenotype) 
@@ -94,13 +96,15 @@ public class MobilityOptimization
         /*
             TODO balancing of assignable nodes to route
             TODO initialization for route genotypes
+            TODO RouteChromosome newInstance method
             TODO improve GenotypeCost efficiency (getCost function from Route Class)
             TODO set convergence criteria
         */
-        
         // SETUP GA variables
         nodes = DatabaseConnection.nodes_matrix(initialNodes, finalNode, transitionNodes);
 
+        //Node info
+        nodeMapping = DatabaseConnection.nodes_matrix_hashMap(initialNodes, finalNode, transitionNodes);
         
         //Set start and dest nodes info
         startNodes = initialNodes;
