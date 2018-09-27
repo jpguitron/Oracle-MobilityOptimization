@@ -51,7 +51,7 @@ public class MobilityOptimization
     //1st index = routeID
     //2nd index = nodesOfEachRoute
     public static int[][] routeMap;                         // 2D array for mapping natural integers - 0,1,... to ID values for each of the routes
-    public static Node[][] nodesPerRoute;                   // 2D array of assignable nodes per route
+    //public static int[][] nodesPerRoute;                   // 2D array of assignable nodes per route
     
     public static HashMap <Integer, Integer> ownMapping;     // Map from nodeID to index for bit genotype
     public static HashMap <Integer, Overlap> overlapMapping; // Map from nodeID to Overlap object
@@ -115,17 +115,14 @@ public class MobilityOptimization
         routes.nodes_route(startNodes, transitionNodes, destNode, nodes, overlapAggressiveness);
         routeMap = new int[routes.routes.length][];
         ArrayList<Chromosome<EnumGene<Integer>>> routeChromosomes = new ArrayList<Chromosome<EnumGene<Integer>>>();
-        nodesPerRoute = new Node[routes.routes.length][];
         
         for(int x = 0; x < routes.routes.length; x++)
         {   
-            nodesPerRoute[x] = new Node[routes.routes[x].hash_Set.size()];
             routeMap[x] = new int[routes.routes[x].hash_Set.size()];
             int i = 0;
             for (Node s : routes.routes[x].hash_Set) 
             {
                 routeMap[x][i] = s.id;
-                nodesPerRoute[x][i] = routes.getNode(s.id, nodes);
                 i++;
             }
             routeChromosomes.add(RouteChromosome.ofInteger(0,i,x));

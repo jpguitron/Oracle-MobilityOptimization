@@ -5,8 +5,8 @@ public class Main
     public static void main(String[] args)
     {   
         //Hyperparameters
-        int generationSize          = 10;
-        int numIterations           = 50;
+        int generationSize          = 100;
+        int numIterations           = 500;
         float crossProbability      = 0.9f;
         float mutateProbability     = 0.01f;
         float overlapAggressiveness = 2.0f;
@@ -23,6 +23,7 @@ public class Main
         }
         
         //Execution
-        MobilityOptimization.run(initialNodes,finalNode,transitionNodes_1,generationSize, numIterations , crossProbability, mutateProbability, overlapAggressiveness);
+        //MobilityOptimization.run(initialNodes,finalNode,transitionNodes_1,generationSize, numIterations , crossProbability, mutateProbability, overlapAggressiveness);
+        MobilityOptimization.run(initialNodes,finalNode,transitionNodes_2,generationSize, numIterations , crossProbability, mutateProbability, overlapAggressiveness);
     }
 }

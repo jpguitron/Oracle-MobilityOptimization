@@ -29,6 +29,8 @@ import io.jenetics.EnumGene;
 import io.jenetics.AbstractChromosome;
 import io.jenetics.Gene;
 
+import java.util.Arrays;
+
 public final class RouteChromosome<T>
 	extends AbstractChromosome<EnumGene<T>>
 	implements Serializable
@@ -112,50 +114,99 @@ public final class RouteChromosome<T>
 		}
 
 		//final int[] subset = array.shuffle(comb.subset(alleles.size(), length));
-		
-    
-		
 		// Fill Chromosome in subset
 		int[] subset = new int[length];
 		
-		
-		
-		
-		//subset[0] = 
-		/*for (int i=0;i<length;i++)
-		{
-            subset[i] = i;
-		}*/
-		
-		final ISeq<EnumGene<T>> genes = IntStream.of(subset)
-			.mapToObj(i -> EnumGene.<T>of(i, alleles))
-			.collect(ISeq.toISeq());
-        
-        Node[] nodes     = MobilityOptimization.nodesPerRoute[rIndex];
-        double[] scores  = new double[nodes.length];                        //Scores array (for selection probability of next node)
 
+        
+        int[] nodes      = MobilityOptimization.routeMap[rIndex];
         Node currentNode = MobilityOptimization.nodeMapping.get(MobilityOptimization.startNodes[rIndex]); 
+
+        Boolean[] visitedNodes = new Boolean[nodes.length];
+        Arrays.fill(visitedNodes, Boolean.FALSE);
+
         
         
         //Number of times to add elements
         for (int i=0;i<nodes.length;i++)
         {
+            double totalScore = 0;
+            double[] scores      = new double[nodes.length];   //Scores array (for selection probability of next node)
             
-            double costToCenter    =                   // Cost to center node
-            double costFromCurrent =                   // Cost from current node
+            //Add element each time
+            for (int j=0;j<nodes.length;j++)
+            {
+                if(!visitedNodes[j])
+                {
+                    Node evaluatedNode     = MobilityOptimization.nodeMapping.get(nodes[j]);
+                    double costsToDest     = evaluatedNode.hmap.get(MobilityOptimization.destNode).cost;
+                    double costFromCurrent = currentNode.hmap.get (evaluatedNode.id).cost;
+                    scores[j]              = costsToDest/costFromCurrent;
+                    scores[j]              = scores[j]*scores[j];
+                    totalScore             += scores[j];
+                }
+                
+            }
             
-            System.out.println(currentNode.lat);
+            //Normalize score
+            for (int j=0;j<nodes.length;j++)
+            {
+                scores[j] = scores[j]/totalScore;
+            }
+
+            //System.out.println("CUMULATIVE");
+            //Calculate cumulative probabilities
+            for (int j=0;j<nodes.length;j++)
+            {
+                if(j>0)
+                    scores[j] += scores[j-1];
+                //System.out.println(scores[j] + ",");
+            }
+            //System.exit(0);
+            double randomNumber = Math.random();
+            //System.out.println("Random: " + randomNumber);
+            
+            //Select event randomly
+            int selectedIndex = nodes.length;        //Initialize with last one by default
+            for (int j=0;j<nodes.length;j++)
+            {
+                if(randomNumber < scores[j])
+                {
+                    selectedIndex   = j;
+                    visitedNodes[j] = true;
+                    currentNode     = MobilityOptimization.nodeMapping.get(nodes[j]);
+                    
+                    //Found node to pick, now add its index into the subset
+                    subset[i]       = j;
+                    //System.out.print(subset[i] + ",");
+                    break;
+                }
+            }
+            
+        }
+        
+        final ISeq<EnumGene<T>> genes = IntStream.of(subset)
+			.mapToObj(i -> EnumGene.<T>of(i, alleles))
+			.collect(ISeq.toISeq());
+			
+        //System.out.println(genes);
+        //System.exit(0);
+        return new RouteChromosome<>(genes, true);
+    }
+            //costsToDest[i]     = evaluatedNode.destEdge.cost;
+            //System.out.println(costsToDest[i]);
+            //costsToCenter[i] = nodes[]
             //scores[i] = 
             //See which element to add next
             /*for(int j=1;j<nodes.length;j++)
             {
                 
-            }*/
+            }
             //System.out.print(nodes[i].id+",");
         }
         //System.out.println();
         //System.out.println(genes);
-        System.exit(0);
+        //System.exit(0);
 			
 		return new RouteChromosome<>(genes, true);
 	}
