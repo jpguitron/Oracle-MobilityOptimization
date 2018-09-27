@@ -131,23 +131,31 @@ public final class RouteChromosome<T>
 			.mapToObj(i -> EnumGene.<T>of(i, alleles))
 			.collect(ISeq.toISeq());
         
-        Node[] nodes    = MobilityOptimization.nodesPerRoute[rIndex];
-        double[] scores = new double[nodes.length];                        //Scores array (for selection probability of next node)
+        Node[] nodes     = MobilityOptimization.nodesPerRoute[rIndex];
+        double[] scores  = new double[nodes.length];                        //Scores array (for selection probability of next node)
+
+        Node currentNode = MobilityOptimization.nodeMapping.get(MobilityOptimization.startNodes[rIndex]); 
+        
         
         //Number of times to add elements
-        /*for (int i=0;i<nodes.length;i++)
+        for (int i=0;i<nodes.length;i++)
         {
-            scores[i] = 
+            
+            double costToCenter    =                   // Cost to center node
+            double costFromCurrent =                   // Cost from current node
+            
+            System.out.println(currentNode.lat);
+            //scores[i] = 
             //See which element to add next
-            for(int j=1;j<nodes.length;j++)
+            /*for(int j=1;j<nodes.length;j++)
             {
                 
-            }
-            System.out.print(nodes[i].id+",");
-        }*/
+            }*/
+            //System.out.print(nodes[i].id+",");
+        }
         //System.out.println();
         //System.out.println(genes);
-        //System.exit(0);
+        System.exit(0);
 			
 		return new RouteChromosome<>(genes, true);
 	}
