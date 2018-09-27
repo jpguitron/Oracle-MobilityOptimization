@@ -94,6 +94,15 @@ public class Routes
         {
             dif -= Math.PI;
         }
+        
+        /*boolean stop = false;
+        if(node_i.id == 105)
+        {
+            System.out.println("i: " + node_i.id + " t: " + node_t.id + " dif " + dif);
+            stop = true;
+        }
+        if(stop)
+            System.exit(0);*/
 
         return dif;
     }
@@ -102,6 +111,7 @@ public class Routes
     {
 
         Node node_d = getNode(dest_n, nodes);
+        
         
         for(int x = 0; x < transition_n.length; x++)
         {
@@ -114,12 +124,12 @@ public class Routes
             
             Node node_i_0 = getNode(initial_n[0], nodes);
             float smallestCost = getCost(transition_n[x], node_i_0);
-            double smallAngle   = getAngle(node_d, node_i_0, node_t);
+            double smallAngle   = getAngle(node_i_0, node_d, node_t);
             for(int y = 0; y < initial_n.length; y++)
             {
                 Node node_i         = getNode(initial_n[y],nodes);
                 float currentCost   = getCost(transition_n[x], node_i);
-                double currentAngle = getAngle(node_d, node_i, node_t);
+                double currentAngle = getAngle(node_i, node_d, node_t);
                 
                 if(currentCost<smallestCost)
                 {

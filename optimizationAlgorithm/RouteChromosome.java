@@ -72,6 +72,14 @@ public final class RouteChromosome<T>
 
 	@Override
 	public RouteChromosome<T> newInstance() {
+        for(int x = 0; x < MobilityOptimization.routes.routes.length; x++)
+        {
+            if(length()==MobilityOptimization.routes.routes[x].hash_Set.size())
+            {
+                //int routeIndex = MobilityOptimization.startNodes[x];
+                return of(_validAlleles, length(), x);
+            }
+        }
 		return of(_validAlleles, length());
 	}
     
@@ -112,7 +120,7 @@ public final class RouteChromosome<T>
 				length, alleles.size()
 			));
 		}
-
+        //System.out.println(".");
 		//final int[] subset = array.shuffle(comb.subset(alleles.size(), length));
 		// Fill Chromosome in subset
 		int[] subset = new int[length];
@@ -124,7 +132,6 @@ public final class RouteChromosome<T>
 
         Boolean[] visitedNodes = new Boolean[nodes.length];
         Arrays.fill(visitedNodes, Boolean.FALSE);
-
         
         
         //Number of times to add elements
@@ -142,7 +149,7 @@ public final class RouteChromosome<T>
                     double costsToDest     = evaluatedNode.hmap.get(MobilityOptimization.destNode).cost;
                     double costFromCurrent = currentNode.hmap.get (evaluatedNode.id).cost;
                     scores[j]              = costsToDest/costFromCurrent;
-                    scores[j]              = scores[j]*scores[j];
+                    scores[j]              = Math.pow(scores[j], 10);
                     totalScore             += scores[j];
                 }
                 
@@ -154,15 +161,12 @@ public final class RouteChromosome<T>
                 scores[j] = scores[j]/totalScore;
             }
 
-            //System.out.println("CUMULATIVE");
             //Calculate cumulative probabilities
             for (int j=0;j<nodes.length;j++)
             {
                 if(j>0)
                     scores[j] += scores[j-1];
-                //System.out.println(scores[j] + ",");
             }
-            //System.exit(0);
             double randomNumber = Math.random();
             //System.out.println("Random: " + randomNumber);
             

@@ -6,7 +6,7 @@ public class Main
     {   
         //Hyperparameters
         int generationSize          = 100;
-        int numIterations           = 500;
+        int numIterations           = 1000;
         float crossProbability      = 0.9f;
         float mutateProbability     = 0.01f;
         float overlapAggressiveness = 2.0f;

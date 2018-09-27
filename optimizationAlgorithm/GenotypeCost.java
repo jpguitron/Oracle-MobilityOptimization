@@ -14,16 +14,14 @@ public class GenotypeCost
         {
             int routeID         = MobilityOptimization.startNodes[i];
             int current_node_id = routeID; 
-            /*System.out.println("-----------");
-            System.out.println("Route: " + i);
-            System.out.println("-----------");*/
             for(int j=0; j<routeGenotype.getChromosome(i).length(); j++)                     // Loop through all transition nodes for the current route
             {
                 boolean addCost  = true;                                                     // Boolean to determine if a cost should be added for this transition
                 int next_node_index = routeGenotype.getChromosome(i).getGene(j).getAllele(); // Index of possible node to visit
                 int next_node_id = MobilityOptimization.routeMap[i][next_node_index];        // Get next_node_id from map
+                
                 for (int k=0;k<MobilityOptimization.overlaps.length;k++)                     // Loop to check if current node has overlap
-                {
+                { 
                     Overlap c_overlap = MobilityOptimization.overlaps[k];
                     if(c_overlap.overlap_node == next_node_id)
                     {
@@ -54,6 +52,7 @@ public class GenotypeCost
                         }
                     }
                 }
+                
                 //System.out.print("Add: " + addCost + " ");
                 if(addCost)
                 {

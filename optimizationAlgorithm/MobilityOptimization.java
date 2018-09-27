@@ -95,11 +95,14 @@ public class MobilityOptimization
     {
         /*
             TODO balancing of assignable nodes to route
-            TODO initialization for route genotypes
             TODO RouteChromosome newInstance method
             TODO improve GenotypeCost efficiency (getCost function from Route Class)
             TODO set convergence criteria
         */
+        
+        // Take execution time
+        double startTime =  System.currentTimeMillis();
+        
         // SETUP GA variables
         nodes = DatabaseConnection.nodes_matrix(initialNodes, finalNode, transitionNodes);
 
@@ -115,6 +118,8 @@ public class MobilityOptimization
         routes.nodes_route(startNodes, transitionNodes, destNode, nodes, overlapAggressiveness);
         routeMap = new int[routes.routes.length][];
         ArrayList<Chromosome<EnumGene<Integer>>> routeChromosomes = new ArrayList<Chromosome<EnumGene<Integer>>>();
+        
+        
         
         for(int x = 0; x < routes.routes.length; x++)
         {   
@@ -186,7 +191,19 @@ public class MobilityOptimization
         System.out.println("Total Distance: " + decimalFormat.format(totalDistance/1000) + " kms");
         System.out.println("Total Cost: " + decimalFormat.format(bestGenotypeCost));
         System.out.println();
+        System.out.println("Execution Time: " + (System.currentTimeMillis()-startTime)/1000 + " seconds");
         
+        //Print JSON to show results//
+        System.out.println("Results");
+        System.out.println(getJsonResult(bestRoute, bestOwn));
+        
+        
+        
+        //Print JSON for initial routes// 
+        System.out.println("Samples");
+        Genotype<EnumGene<Integer>> sampleRoute = routePermFactory.newInstance();
+        Genotype<BitGene> sampleOwn = ownChangeFactory.newInstance();
+        System.out.println(getJsonResult(sampleRoute, sampleOwn));
     }
     
     
@@ -267,6 +284,78 @@ public class MobilityOptimization
         return result;
     }
     
+    
+    public static String getJsonResult(Genotype<EnumGene<Integer>> routeGenotype, Genotype<BitGene> ownGenotype)
+    {
+        String result ="";
+        
+        for (int i=0;i<routeGenotype.length();i++)
+        {
+            result+= "[\n[" + Integer.toString(startNodes[i]);
+            result+=",";
+            result+= nodeMapping.get(startNodes[i]).lat;
+            result+=",";
+            result+= nodeMapping.get(startNodes[i]).lon;
+            result += "],\n";
+            
+            
+            Chromosome<EnumGene<Integer>> chromosome = routeGenotype.getChromosome(i);
+            for (int j=0;j<chromosome.length();j++)
+            {
+                int index  = chromosome.getGene(j).getAllele();
+                int nodeID = routeMap[i][index]; 
+                    
+                if(ownMapping.containsKey(nodeID))
+                {
+                    int ownGenotypeIndex = ownMapping.get(nodeID);
+                    
+                    // If node1 and bit == 1  OR node2 and bit == 0 add node to this route
+                    if(startNodes[i] == overlapMapping.get(nodeID).route_node_1)
+                    {
+                        if(ownGenotype.getChromosome().getGene(ownGenotypeIndex).getAllele())
+                        {
+                            result += "[";
+                            result += Integer.toString(nodeID);
+                            result+=",";
+                            result+= nodeMapping.get(nodeID).lat;
+                            result+=",";
+                            result+= nodeMapping.get(nodeID).lon;
+                            result += "],\n";
+                        }
+                    }
+                    else if(!ownGenotype.getChromosome().getGene(ownGenotypeIndex).getAllele())
+                    {
+                            result += "[";
+                            result += Integer.toString(nodeID);
+                            result+=",";
+                            result+= nodeMapping.get(nodeID).lat;
+                            result+=",";
+                            result+= nodeMapping.get(nodeID).lon;
+                            result += "],\n";
+                    }
+                }
+                else
+                {
+                    result += "[";
+                    result += Integer.toString(nodeID);
+                    result+=",";
+                    result+= nodeMapping.get(nodeID).lat;
+                    result+=",";
+                    result+= nodeMapping.get(nodeID).lon;
+                    result += "],\n";
+                }
+            }
+            result+="[" + Integer.toString(destNode);
+            result+=",";
+            result+= nodeMapping.get(destNode).lat;
+            result+=",";
+            result+= nodeMapping.get(destNode).lon;
+            result += "]\n";
+            result+="]\n";
+            result+="\n";
+        }
+        return result;
+    }
 }
 /*Engine<EnumGene<Integer>, Double> engineRoute = Engine.builder(MobilityOptimization::evalRoutePerm, routePermFactory)
                                             .populationSize(generationSize)
