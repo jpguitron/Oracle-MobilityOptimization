@@ -12,31 +12,44 @@ public class mainPruebas
         DatabaseConnection data = new DatabaseConnection();
         Node[] w = data.nodes_matrix(b, c, a);
 
-        /*
-         * for(int x = 0; x < w.length;x++) { for(int y = 0; y < w[x].TEdgeSize ;y++) {
-         * System.out.print(w[x].id+" ");
-         * System.out.print(w[x].transitionEdges[y].dest+" ");
-         * System.out.print(w[x].transitionEdges[y].cost+" ");
-         * System.out.print(w[x].transitionEdges[y].dist_cost+" ");
-         * System.out.print(w[x].transitionEdges[y].time_cost+" ");
-         * System.out.println();
-         * 
-         * }
-         * 
-         * if(w[x].destEdge!=null) { System.out.print(w[x].id+" ");
-         * System.out.print(w[x].destEdge.dest+" ");
-         * System.out.print(w[x].destEdge.cost+" ");
-         * System.out.print(w[x].destEdge.dist_cost+" ");
-         * System.out.print(w[x].destEdge.time_cost+" "); System.out.println(); }
-         * 
-         * for(int y = 0; y < w[x].IEdgeSize ;y++) { System.out.print(w[x].id+" ");
-         * System.out.print(w[x].initialEdges[y].dest+" ");
-         * System.out.print(w[x].initialEdges[y].cost+" ");
-         * System.out.print(w[x].initialEdges[y].dist_cost+" ");
-         * System.out.print(w[x].initialEdges[y].time_cost+" "); System.out.println(); }
-         * 
-         * System.out.println("------------------------------"); }
-         */
+
+        for(int x = 0; x < w.length;x++) { for(int y = 0; y < w[x].TEdgeSize ;y++) 
+        {
+            System.out.print(w[x].id+" ");
+            System.out.print(w[x].transitionEdges[y].dest+" ");
+            System.out.print(w[x].transitionEdges[y].cost+" ");
+            System.out.print(w[x].transitionEdges[y].dist_cost+" ");
+            System.out.print(w[x].transitionEdges[y].time_cost+" | ");
+            System.out.print("Lat: "+w[x].lat+" Lon:"+w[x].lon);
+            System.out.println();
+        }
+          
+        if(w[x].destEdge!=null) 
+        { 
+            System.out.print(w[x].id+" ");
+            System.out.print(w[x].destEdge.dest+" ");
+            System.out.print(w[x].destEdge.cost+" ");
+            System.out.print(w[x].destEdge.dist_cost+" ");
+            System.out.print(w[x].destEdge.time_cost+" | "); 
+            System.out.print("Lat: "+w[x].lat+" Lon:"+w[x].lon);
+            System.out.println(); 
+        }
+         
+        for(int y = 0; y < w[x].IEdgeSize ;y++) 
+        { 
+            System.out.print(w[x].id+" ");
+            System.out.print(w[x].initialEdges[y].dest+" ");
+            System.out.print(w[x].initialEdges[y].cost+" ");
+            System.out.print(w[x].initialEdges[y].dist_cost+" ");
+            System.out.print(w[x].initialEdges[y].time_cost+" | "); 
+            System.out.print("Lat: "+w[x].lat+" Lon:"+w[x].lon);
+            System.out.println(); 
+        }
+         
+        System.out.println("------------------------------"); }
+         
+
+
 
         Routes rutas = new Routes(b);
         rutas.nodes_route(b, a, c, w, 1.5f);

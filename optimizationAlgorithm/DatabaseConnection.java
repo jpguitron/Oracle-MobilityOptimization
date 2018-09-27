@@ -64,8 +64,8 @@ public class DatabaseConnection
                
                int id_s = rs.getInt("ID_S");
                int id_e = rs.getInt("ID_E");
-               int distance = rs.getInt("distance");
-               int duration  = rs.getInt("duration");
+               float distance = rs.getFloat("distance");
+               float duration  = rs.getFloat("duration");
 
                if(actual != id_s)
                {
@@ -147,10 +147,26 @@ public class DatabaseConnection
                else if(flag == 2)
                 nodes[contNodes].addDEdge(id_e, duration, distance);
             }
-            
             rs.close();
+
+            rs = stmt.executeQuery( "SELECT * FROM LOCATIONS ORDER BY ID;" );
+            contNodes = 0;
+            while(rs.next()) 
+            {
+                int id = rs.getInt("ID");   
+                if(nodes[contNodes].id == id)
+                {
+                    nodes[contNodes].lat = rs.getFloat("LAT");
+                    nodes[contNodes].lon = rs.getFloat("LON");
+                    contNodes++;
+                }
+            }
+            
             stmt.close();
             disconnect(conn);
+
+
+
             return nodes;
          } 
          catch ( Exception e ) 
@@ -188,7 +204,6 @@ public class DatabaseConnection
             if (conn != null) 
             {
                 conn.close();
-                //System.out.println("Disconnected from SQLite.");
             }
         } 
         catch (SQLException ex) 
@@ -196,60 +211,4 @@ public class DatabaseConnection
             System.out.println(ex.getMessage());
         }
     }
-
-    /*public static void main(String[] args) 
-    {
-        int [] a = {0,1,2,3};
-        int [] b = {101,102};
-        int c = 100;
-        
-        Node[] w = nodes_matrix(b, c, a);
-        
-        System.out.print("id");
-        System.out.print(" id_2");
-        System.out.print(w[x].transitionEdges[y].cost+" ");
-        System.out.print(w[x].transitionEdges[y].dist_cost+" ");
-        System.out.print(w[x].transitionEdges[y].time_cost+" ");
-        System.out.println();
-
-        for(int x = 0; x < w.length;x++)
-        {
-            for(int y = 0; y < w[x].TEdgeSize ;y++)
-            {
-                System.out.print(w[x].id+" ");
-                System.out.print(w[x].transitionEdges[y].dest+" ");
-                System.out.print(w[x].transitionEdges[y].cost+" ");
-                System.out.print(w[x].transitionEdges[y].dist_cost+" ");
-                System.out.print(w[x].transitionEdges[y].time_cost+" ");
-                System.out.println();
-                
-            }
-
-            if(w[x].destEdge!=null)
-            {
-                System.out.print(w[x].id+" ");
-                System.out.print(w[x].destEdge.dest+" ");
-                System.out.print(w[x].destEdge.cost+" ");
-                System.out.print(w[x].destEdge.dist_cost+" ");
-                System.out.print(w[x].destEdge.time_cost+" ");
-                System.out.println();
-            }
-
-            for(int y = 0; y < w[x].IEdgeSize ;y++)
-            {
-                System.out.print(w[x].id+" ");
-                System.out.print(w[x].initialEdges[y].dest+" ");
-                System.out.print(w[x].initialEdges[y].cost+" ");
-                System.out.print(w[x].initialEdges[y].dist_cost+" ");
-                System.out.print(w[x].initialEdges[y].time_cost+" ");
-                System.out.println();
-            }
-            
-
-
-            System.out.println("------------------------------");
-
-
-        }
-    }*/
 }

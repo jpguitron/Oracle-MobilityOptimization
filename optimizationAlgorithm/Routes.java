@@ -4,6 +4,7 @@ import java.util.*;
 
 import optimizationAlgorithm.*;
 
+
 class Route
 {
     public int routeName;
@@ -68,8 +69,39 @@ public class Routes
         }
     }
 
+    public double getAngle(Node node_i, Node node_d,Node node_t)
+    {
+        float deltaX = node_i.lat - node_d.lat;
+        float deltaY = node_i.lon - node_d.lon;
+
+        double angle_1 = Math.atan(deltaY/deltaX); 
+
+        if(deltaX < 0)
+            angle_1 += Math.PI;
+
+        deltaX = node_t.lat - node_d.lat;
+        deltaY = node_t.lon - node_d.lon;
+
+        double angle_2 = Math.atan(deltaY/deltaX);
+        
+        if(deltaX < 0)
+            angle_2 += Math.PI;
+
+        double dif = Math.abs(angle_1-angle_2);
+
+        while(dif > Math.PI)
+        {
+            dif -= Math.PI;
+        }
+
+        return dif;
+    }
+
     public void nodes_route(int initial_n[],int transition_n[], int dest_n, Node nodes[], float aggression) //Aggression parameters for assigningnodes
     {
+
+        Node node_d = getNode(dest_n, nodes);
+        
         for(int x = 0; x < transition_n.length; x++)
         {
             int smallestId = initial_n[0];
