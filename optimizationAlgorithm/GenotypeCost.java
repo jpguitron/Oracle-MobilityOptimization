@@ -33,7 +33,8 @@ public class GenotypeCost
                         // If node1 and bit == 0  OR node2 and bit == 1 dont add any cost (its added in the other route)
                         if(routeID == c_overlap.route_node_1)
                         {
-                            if(ownGenotype.getChromosome().getGene().getBit())
+                            int ownGenotypeIndex = MobilityOptimization.ownMapping.get(c_overlap.overlap_node);
+                            if(ownGenotype.getChromosome().getGene(ownGenotypeIndex).getBit())
                                 break;
 
                             else
@@ -44,7 +45,8 @@ public class GenotypeCost
                         }
                         else
                         {
-                            if(ownGenotype.getChromosome().getGene().getBit())
+                            int ownGenotypeIndex = MobilityOptimization.ownMapping.get(c_overlap.overlap_node);
+                            if(ownGenotype.getChromosome().getGene(ownGenotypeIndex).getBit())
                             {
                                 addCost = false;
                                 break;
