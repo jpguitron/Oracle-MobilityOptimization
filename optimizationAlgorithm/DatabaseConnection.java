@@ -81,76 +81,157 @@ public class DatabaseConnection
         }
         
     
-    /*public static Node[] nodes_matrix(int initialNodes[],int finalNode, int transitionNodes[])
-    {
-        HashMap<Integer, Node> hmap = new HashMap<Integer, Node>();
-
-        Node nodes[];     
-
-        Statement stmt = null;
-        Connection conn = connect();
-        
-        try 
+        public static Node[] nodes_matrix(int initialNodes[],int finalNode, int transitionNodes[])
         {
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM DISTANCES WHERE ID_S != ID_E ORDER BY ID_S;" );
-            int allNodes = initialNodes.length + transitionNodes.length + 1;
-
-            for(int x = 0; x < transitionNodes.length; x++)
-            {
-                Node node = new Node();
-                hmap.put(transitionNodes[x],node);
-            }
-
-            for(int x = 0; x < initialNodes.length; x++)
-            {
-                Node node = new Node();
-                hmap.put(initialNodes[x],node);
-            }
-
-            Node node = new Node();
-            hmap.put(finalNode,node);
+            Node nodes[];       
+            Statement stmt = null;
+            Connection conn = connect();
             
-            while(rs.next()) 
+            try 
             {
-               
-               int id_s = rs.getInt("ID_S");
-               int id_e = rs.getInt("ID_E");
-               float distance = rs.getFloat("distance");
-               float duration  = rs.getFloat("duration");
-
-
-
-            }
-            rs.close();
-
-            rs = stmt.executeQuery( "SELECT * FROM LOCATIONS ORDER BY ID;" );
-            contNodes = 0;
-            while(rs.next()) 
-            {
-                int id = rs.getInt("ID");   
-                if(nodes[contNodes].id == id)
+                stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery( "SELECT * FROM DISTANCES WHERE ID_S != ID_E ORDER BY ID_S;" );
+                int allNodes = initialNodes.length + transitionNodes.length + 1;
+                nodes = new Node [allNodes]; 
+    
+                for(int x =0; x < allNodes; x++)
                 {
-                    nodes[contNodes].lat = rs.getFloat("LAT");
-                    nodes[contNodes].lon = rs.getFloat("LON");
-                    contNodes++;
+                    nodes[x] = new Node();
+                    nodes[x].initalizeEdges(initialNodes.length,transitionNodes.length);
                 }
-            }
-            
-            stmt.close();
-            disconnect(conn);
-
-
-
-            return nodes;
-         } 
-         catch ( Exception e ) 
-         {
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            System.exit(0);
-         }
-         return null;
-    }*/
+                
+                int actual = rs.getInt("ID_S");
+                nodes[0].id = actual;
+                int contNodes = 0; 
+    
+                int flag = 0;
+                
+                for(int x = 0; x < allNodes;x++)
+                {
+                    if(x < initialNodes.length)
+                    {
+                        if(actual == initialNodes[x])
+                        {
+                            flag = 0;
+                            break;
+                        }
+                    }
+                    else if(x >= initialNodes.length)
+                    {
+                        if(actual == transitionNodes[x-initialNodes.length])
+                        {
+                            flag = 1;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        flag = 2;
+                    }
+                }
+                
+                while(rs.next()) 
+                {
+                   
+                   int id_s = rs.getInt("ID_S");
+                   int id_e = rs.getInt("ID_E");
+                   int distance = rs.getInt("distance");
+                   int duration  = rs.getInt("duration");
+    
+                   if(actual != id_s)
+                   {
+                        actual = id_s;
+                        
+                        for(int x = 0; x < allNodes;x++)
+                        {
+                            
+                            if(x < initialNodes.length) 
+                            {
+                                if(actual == initialNodes[x])
+                                {
+                                    
+                                    flag = 0;
+                                    contNodes++;
+                                    nodes[contNodes].id = actual;
+                                    break;
+                                }
+                            }
+                            else if(x >= initialNodes.length && x < allNodes - 1)
+                            {
+                                
+                                if(actual == transitionNodes[x-initialNodes.length])
+                                {
+                                    
+                                    flag = 1;
+                                    contNodes++;
+                                    nodes[contNodes].id = actual;
+                                    break;
+                                }
+                            }
+                            else if(actual == finalNode)
+                            {
+                                contNodes++;
+                                nodes[contNodes].id = actual;
+                                flag = 2;
+                            }
+                            else
+                            {
+                                flag = 3;
+                            }
+                        }
+                   }
+    
+                   for(int x = 0; x < allNodes;x++)
+                   {
+                       
+                       if(x < initialNodes.length) 
+                       {
+                           if(id_e == initialNodes[x])
+                           {
+                               flag = 0;
+                               break;
+                           }
+                       }
+                       else if(x >= initialNodes.length && x < allNodes - 1)
+                       {
+                           
+                           if(id_e == transitionNodes[x-initialNodes.length])
+                           {
+                               flag = 1;
+                               break;
+                           }
+                       }
+                       else if(id_e == finalNode)
+                       {
+                           flag = 2;
+                       }
+                       else
+                       {
+                           flag = 3;
+                       }
+                   }
+                   
+                   if(flag == 0)
+                    nodes[contNodes].addIEdge(id_e, duration, distance);
+                   else if(flag == 1)
+                    nodes[contNodes].addTEdge(id_e, duration, distance);
+                   else if(flag == 2)
+                    nodes[contNodes].addDEdge(id_e, duration, distance);
+                }
+                
+                rs.close();
+                stmt.close();
+                disconnect(conn);
+                return nodes;
+             } 
+             catch ( Exception e ) 
+             {
+                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+                System.exit(0);
+             }
+             System.out.println("Operation done successfully");
+             return null;
+        }
 
     private static Connection connect() 
     {
