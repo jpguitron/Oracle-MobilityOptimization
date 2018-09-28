@@ -2,7 +2,7 @@
 
 ## About
 The goal of this program is to get an efficient route selection given information on the starting points, stopping points, and final destination point of a city.
-The example in this code is set up in the city of Guadalajara, Jalisco, Mexico and uses Oracle's MDC as destination point.
+The example in this code is set up in the city of Guadalajara, Jalisco, Mexico with Oracle's MDC as destination point.
 
 
 ## Dependencies
