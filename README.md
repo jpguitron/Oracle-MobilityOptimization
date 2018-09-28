@@ -15,6 +15,7 @@ This model initializes several sample routes with a probabilistic approach, and 
 
 ## Parameters and execution
 The algorithm's parameters are located in the Main.java, with the default values the execution takes around 1 minute.
+For more information see Algorithm.pdf
 
 ## How to run
 
