@@ -6,8 +6,8 @@ The example in this code is set up in the city of Guadalajara, Jalisco, Mexico a
 
 
 ## Dependencies
-Jenetics 4.2.0
-Sqlite-jdbc 3.23.1
+* Jenetics 4.2.0
+* Sqlite-jdbc 3.23.1
 
 ## Algorithm
 This model initializes several sample routes with a probabilistic approach, and then runs a genetic algorithm attempting to find the best routes.
