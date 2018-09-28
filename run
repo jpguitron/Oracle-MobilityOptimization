@@ -1,0 +1,1 @@
+java -cp jars/sqlite-jdbc-3.23.1.jar:jars/jenetics-4.2.0.jar: optimizationAlgorithm/Main
