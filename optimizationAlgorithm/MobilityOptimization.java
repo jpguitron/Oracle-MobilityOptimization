@@ -194,13 +194,16 @@ public class MobilityOptimization
         System.out.println("Execution Time: " + (System.currentTimeMillis()-startTime)/1000 + " seconds");
         
         //Print JSON to show results//
-        /*System.out.println("Results");
+        System.out.println("----------------------------------");
+        System.out.println("JSON Results (for google maps API)");
+        System.out.println("----------------------------------");
+        System.out.println("Results");
         System.out.println(getJsonResult(bestRoute, bestOwn));
         
         
         
         //Print JSON for initial routes// 
-        System.out.println("Samples");
+        /*System.out.println("Samples");
         Genotype<EnumGene<Integer>> sampleRoute = routePermFactory.newInstance();
         Genotype<BitGene> sampleOwn = ownChangeFactory.newInstance();
         System.out.println(getJsonResult(sampleRoute, sampleOwn));*/
