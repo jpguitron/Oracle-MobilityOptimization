@@ -9,7 +9,6 @@ public class Main
         int numIterations           = 500;
         float crossProbability      = 0.9f;
         float mutateProbability     = 0.01f;
-        float overlapAggressiveness = 2.0f;
         
         //Node info
         int[] initialNodes           = {101,102,103,104,105};
@@ -23,7 +22,7 @@ public class Main
         }
         
         //Execution
-        MobilityOptimization.run(initialNodes,finalNode,transitionNodes_1,generationSize, numIterations , crossProbability, mutateProbability, overlapAggressiveness);
-        //MobilityOptimization.run(initialNodes,finalNode,transitionNodes_2,generationSize, numIterations , crossProbability, mutateProbability, overlapAggressiveness);
+        MobilityOptimization.run(initialNodes,finalNode,transitionNodes_1,generationSize, numIterations , crossProbability, mutateProbability);
+        MobilityOptimization.run(initialNodes,finalNode,transitionNodes_2,generationSize, numIterations , crossProbability, mutateProbability);
     }
 }

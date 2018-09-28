@@ -91,7 +91,7 @@ public class MobilityOptimization
     
 
     ////////////////////////////////////////////////////////////////////MAIN GA FUNCTION//////////////////////////////////////////////////////////////////
-    public static void run (int[] initialNodes, int finalNode, int[] transitionNodes , int generationSize, int numIterations, float crossProbability, float mutateProbability, float overlapAggressiveness) 
+    public static void run (int[] initialNodes, int finalNode, int[] transitionNodes , int generationSize, int numIterations, float crossProbability, float mutateProbability) 
     {
         /*
             TODO balancing of assignable nodes to route
@@ -115,7 +115,7 @@ public class MobilityOptimization
         
         //Get routes info
         routes = new Routes(startNodes);
-        routes.nodes_route(startNodes, transitionNodes, destNode, nodes, overlapAggressiveness);
+        routes.nodes_route(startNodes, transitionNodes, destNode, nodes);
         routeMap = new int[routes.routes.length][];
         ArrayList<Chromosome<EnumGene<Integer>>> routeChromosomes = new ArrayList<Chromosome<EnumGene<Integer>>>();
         

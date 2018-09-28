@@ -107,7 +107,7 @@ public class Routes
         return dif;
     }
 
-    public void nodes_route(int initial_n[],int transition_n[], int dest_n, Node nodes[], float aggression) //Aggression parameters for assigningnodes
+    public void nodes_route(int initial_n[],int transition_n[], int dest_n, Node nodes[]) //Aggression parameters for assigningnodes
     {
 
         Node node_d = getNode(dest_n, nodes);
@@ -150,43 +150,5 @@ public class Routes
                 addToRoute(smallAngleID, getNode(transition_n[x], nodes));
             }
         }
-        
-        
-        /*
-        for(int x = 0; x < transition_n.length; x++)
-        {
-            int smallestId = initial_n[0];
-            int secondSmallestId = -1; 
-            float smallestCost = getCost(transition_n[x], getNode(initial_n[0], nodes));
-            float secondSmallestCost = -1;
-            float proportion = 0;
-            int smallestAngleID = initial_n[0];
-            
-            for(int y = 0; y < initial_n.length; y++)
-            {
-                Node node = getNode(initial_n[y],nodes);
-                float currentCost = getCost(transition_n[x], node);
-                
-                if(smallestCost > currentCost || secondSmallestCost ==-1)
-                {
-                    secondSmallestCost = smallestCost;
-                    secondSmallestId = smallestId;
-
-                    smallestCost = currentCost;
-                    smallestId = initial_n[y];
-                    
-                    proportion = secondSmallestCost/smallestCost;
-                }
-            }
-
-            addToRoute(smallestId, getNode(transition_n[x], nodes));
-            
-            // Add if the node 
-            if(proportion <= aggression)
-            {
-                addToRoute(secondSmallestId, getNode(transition_n[x], nodes));
-            }
-            
-        }*/
     }
 }
